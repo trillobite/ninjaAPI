@@ -11,14 +11,12 @@ module.exports = {
     production: {
         secret: 'ninjaApiRox',
         rootPath: rootPath,
-        db: 'mongodb://patterncoder:y5EQJ5m7C3@ds041157.mongolab.com:41157/tipminer',
+        db: 'mongodb://patterncoder:y5EQJ5m7C3@ds042688.mongolab.com:42688/ninja-api',
         port: process.env.PORT || 80
     }
 
 
 
-    // use below command to connect mongo shell to mongolab
-    // mongo ds030607.mongolab.com:30607/tipminer -u patterncoder -p y5EQJ5m7C3
-    
-    //mongo ds041157.mongolab.com:41157/tipminer -u patterncoder -p y5EQJ5m7C3
+    // mongodb://patterncoder:y5EQJ5m7C3@ds042688.mongolab.com:42688/ninja-api
+    // mongo ds042688.mongolab.com:42688/ninja-api -u patterncoder -p y5EQJ5m7C3
 };
