@@ -1,0 +1,39 @@
+{
+  "name": "banquetninja",
+  "version": "0.1.0",
+  "description": "clean slate of tipminer",
+  "readme": "README.md",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "cookie-parser": "^1.3.5",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "jsonwebtoken": "^5.0.5",
+    "mongoose": "^4.1.4",
+    "morgan": "^1.6.1",
+    "passport": "^0.3.0",
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1",
+    "serve-favicon": "^2.3.0",
+    "socket.io": "^1.3.6"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/patterncoder/ninjaAPI.git"
+  },
+  "author": "Christopher Baily & Michael Robertson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patterncoder/ninjaAPI/issues"
+  },
+  "homepage": "https://github.com/patterncoder/ninjaAPI#readme"
+}

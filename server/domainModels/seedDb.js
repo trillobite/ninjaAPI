@@ -1,0 +1,94 @@
+var Q = require('q');
+var encrypt = require('../utilities/encryption');
+var User = require('mongoose').model('User');
+var Company = require('mongoose').model('Company');
+
+exports.createDefaultCompany = createDefaultCompany;
+exports.createDefaultUsers = createDefaultUsers;
+
+function createDefaultCompany() {
+    var deferred = Q.defer();
+    
+    Company.find({}).exec(function (err, collection) {
+        if (collection.length === 0) {
+
+            var company1 = {
+                companyName: "Old Town Dining, LLC",
+                addresses: [{
+                    addressType: "Headquarters",
+                    primary: true,
+                    address1: "28699 Old Town Front Street",
+                    city: "Temecula",
+                    state: "CA",
+                    zip: "92592"
+                }],
+                emails: [{
+                    emailType: "Headquarters",
+                    primary: true,
+                    email: "chris@oldtowndining.com"
+                }],
+                contactNumbers: [{ primary: true, contactType: "Main", number: "9516769567" }],
+                duesCurrent: true,
+                accountLockout: false
+            };
+
+            Company.create(company1, function (err, company) {
+                if (err) {
+                    deferred.reject(new Error(err));
+                } else {
+                    
+
+                    deferred.resolve(company._id);
+                    
+                }
+            });
+            
+            console.log('10 successfully created company document....');
+        }
+
+    });
+    
+    return deferred.promise;
+}
+
+
+
+function createDefaultUsers(companyId) {
+    
+    function encryptPassword(user) {
+        var salt, hash;
+        salt = encrypt.createSalt();
+        hash = encrypt.hashPwd(salt, user.firstName.toLowerCase());
+        user.hashed_pwd = hash;
+        user.salt = salt;
+        return user;
+    }
+    
+    var deferred = Q.defer();
+    
+    User.find({}).exec(function (err, collection) {
+        if (collection.length === 0) {
+            var user1 = encryptPassword({company: companyId, firstName: "nolan", lastName: "james", username: "nolan@nolan.com", roles: ['Bronze'] });
+            var user2 = encryptPassword({ company: companyId, firstName: "chris", lastName: "baily", username: "chris@chris.com", roles: ['admin', 'superUser'] });
+            var user3 = encryptPassword({company: companyId, firstName: "kim", lastName: "rose", username: "kim@kim.com", roles: ['admin']});
+            var user4 = encryptPassword({ company: companyId, firstName: "alex", lastName: "phillips", username: "alex@alex.com", roles: ['Silver'] });
+            var user5 = encryptPassword({company: companyId, firstName: "hayley", lastName: "briana", username: "hayley@hayley.com", roles: ['Gold'] });
+            
+            User.create(user1, user2, user3, user4, user5, function (err, user1, user2, user3, user4, user5){
+                if (err) {
+                    deferred.reject(new Error(err));
+                }
+                
+                console.log('20 succesfully created menuitem documents.....');
+                deferred.resolve();
+                
+            });
+            
+
+        }
+
+    });
+    return deferred.promise;
+
+}
+
