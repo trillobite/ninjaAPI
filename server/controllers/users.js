@@ -3,8 +3,11 @@ var User = require('mongoose').model('User');
 var encrypt = require('../utilities/encryption');
 
 exports.getUsers = function(req, res){
-
-    User.find({company: req.user.company}).select('firstName lastName username company roles').exec(function(err, collection){
+    console.log('in controller');
+    //company: req.user.company
+    User.find({}).select('firstName lastName username company roles').exec(function(err, collection){
+        console.log('in mongoose call');
+        console.log(collection);
         res.send(collection);
     });
 

@@ -6,7 +6,7 @@ module.exports = {
         secret: 'ninjaApiRox',
         rootPath: rootPath,
         db: 'mongodb://localhost/ninjaAPI',
-        port: process.env.PORT || 3000
+        port: process.env.PORT || 3001
     },
     production: {
         secret: 'ninjaApiRox',

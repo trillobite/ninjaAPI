@@ -18,17 +18,21 @@ module.exports = function (app) {
     
     // handle the one api route that requires no authentication
     app.post('/api/companies', companiesController.createCompany);
-    
+    app.use(function(req,res,next){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
     // lockout api without authenticated user.  passport puts a user object
     // on the req object...so if its not there there is no authenticated user
     app.use('/api/*',function(req, res, next){
-        
-        if ('user' in req){
-            next();
-        }
-        else {
-            res.sendStatus(403);
-        }
+        next();
+        // if ('user' in req){
+        //     next();
+        // }
+        // else {
+        //     res.sendStatus(403);
+        // }
     });
     //api routes with pointers to custom routers
     // app.use('/api/navigation', navigationRoutes);

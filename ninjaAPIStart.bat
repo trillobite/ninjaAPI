@@ -1,5 +1,5 @@
 start mongod.exe
-cd\development\banquetNinja
+cd\development\ninjaAPI
 start code .
 
 nodemon server.js
