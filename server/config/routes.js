@@ -1,10 +1,11 @@
 var auth = require('./auth');
 var companiesController = require('../controllers/companies');
+var routesIndex = require('../routes/index');
 // var navigationRoutes = require('../routes/api_navigation');
-var userRoutes = require('../routes/api_users.js');
+//var userRoutes = require('../routes/api_users.js');
 // var contractRoutes = require('../routes/api_contracts.js');
 // var customerRoutes = require('../routes/api_customers.js');
-var companyRoutes = require('../routes/api_companies.js');
+//var companyRoutes = require('../routes/api_companies.js');
 // var bidRoutes = require('../routes/api_bids.js');
 // var menuRoutes = require('../routes/api_menus.js');
 // var menuItemRoutes = require('../routes/api_menuItems.js');
@@ -25,21 +26,25 @@ module.exports = function (app) {
     });
     // lockout api without authenticated user.  passport puts a user object
     // on the req object...so if its not there there is no authenticated user
-    app.use('/api/*',function(req, res, next){
-        next();
-        // if ('user' in req){
-        //     next();
-        // }
-        // else {
-        //     res.sendStatus(403);
-        // }
-    });
+    // app.use('/api/*',function(req, res, next){
+    //     next();
+    //     // if ('user' in req){
+    //     //     next();
+    //     // }
+    //     // else {
+    //     //     res.sendStatus(403);
+    //     // }
+    // });
+    // app.get('/api/v1/users', function(req,res){
+    //     res.send({data: 'data'});
+    // });
+    app.use('/api', routesIndex);
     //api routes with pointers to custom routers
     // app.use('/api/navigation', navigationRoutes);
     // app.use('/api/contracts', contractRoutes);
-    app.use('/api/users', userRoutes);
+    //app.use('/api/users', userRoutes);
     // app.use('/api/customers', customerRoutes);
-    app.use('/api/companies', companyRoutes);
+    //app.use('/api/companies', companyRoutes);
     // app.use('/api/bids', bidRoutes);
     // app.use('/api/menus', menuRoutes);
     // app.use('/api/menuItems', menuItemRoutes);
