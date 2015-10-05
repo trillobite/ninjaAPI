@@ -1,5 +1,5 @@
 var auth = require('./auth');
-var companiesController = require('../controllers/companies');
+var companiesController = require('../routes/v1/companies/companiesCtrl');
 var routesIndex = require('../routes/index');
 // var navigationRoutes = require('../routes/api_navigation');
 //var userRoutes = require('../routes/api_users.js');
