@@ -34,7 +34,7 @@ companySchema.methods = {
     isDuesCurrent: function () {return this.duesCurrent;},
     isAccountLockout: function () {return this.accountLockout;}
 };
-exports.schema = companySchema;
+module.exports = companySchema;
 
 
 

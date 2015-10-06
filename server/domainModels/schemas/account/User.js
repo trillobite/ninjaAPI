@@ -29,7 +29,8 @@ userSchema.methods = {
     }
 };
 
-exports.schema = userSchema;
+
+module.exports = userSchema;
 
 
 

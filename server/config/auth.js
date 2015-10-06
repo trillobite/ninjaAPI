@@ -15,15 +15,19 @@ exports.authenticate2 = function(req, res, next) {
             res.json({success: false, message: 'Authentication failed. User not fount'});
         }
         else if (user) {
+            
             if(!user.authenticate(pwd)) {
                 res.json({success: false, message: "Authentication failed. Wrong password"});
             } else {
                 var token = jwt.sign(user, config.secret, {
                     expiresInMinutes: 1440 //24hours
                 });
-                
+                user = user.toObject();
+                delete user.hashed_pwd;
+                delete user.salt;
                 res.json({
-                    success: true, 
+                    success: true,
+                    user: user,
                     message: 'Enjoy your token!', 
                     token: token
                 });
