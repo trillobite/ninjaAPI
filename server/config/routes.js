@@ -65,9 +65,9 @@ module.exports = function (app) {
     // app.use('/api/lookups', lookupsRoutes);
     
     // Partials
-    app.get('/partials/*', function (req, res) {
-        res.render('../../public/app/' + req.params[0]);
-    });
+    // app.get('/partials/*', function (req, res) {
+    //     res.render('../../public/app/' + req.params[0]);
+    // });
 
     // Login and Logout
     // the post to /login is where passport adds the req.user to the req object
@@ -79,8 +79,7 @@ module.exports = function (app) {
     });
     // bootstrappedUser gets added on page refreshes if the user is logged in otherwise it is undefined.
     app.get('*', function (req, res) {
-        console.log(req.user);
-        res.render('index', { bootstrappedUser: req.user });
+        res.sendStatus(404);
     });
 
 };

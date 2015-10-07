@@ -31,19 +31,22 @@ function createDefaultCompany() {
                 duesCurrent: true,
                 accountLockout: false
             };
-
+            console.log("just before sending to mongo");
+            console.log(company1);
             Company.create(company1, function (err, company) {
                 if (err) {
+                    console.log('i have an error');
+                    console.log(err);
                     deferred.reject(new Error(err));
                 } else {
                     
-
+                    console.log('10 successfully created company document....');
                     deferred.resolve(company._id);
                     
                 }
             });
             
-            console.log('10 successfully created company document....');
+            
         }
 
     });
@@ -79,7 +82,7 @@ function createDefaultUsers(companyId) {
                     deferred.reject(new Error(err));
                 }
                 
-                console.log('20 succesfully created menuitem documents.....');
+                console.log('20 succesfully created user documents.....');
                 deferred.resolve();
                 
             });
