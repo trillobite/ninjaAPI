@@ -25,7 +25,7 @@ module.exports = function (app) {
         next();
     });
     app.options('*', function(req,res,next){ res.send(200);});
-    app.post('/api/companies', companiesController.createCompany);
+    app.post('/api/v1/companies', companiesController.createCompany);
     
     // lockout api without authenticated user.  passport puts a user object
     // on the req object...so if its not there there is no authenticated user

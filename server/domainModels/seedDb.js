@@ -29,7 +29,8 @@ function createDefaultCompany() {
                 }],
                 contactNumbers: [{ primary: true, contactType: "Main", number: "9516769567" }],
                 duesCurrent: true,
-                accountLockout: false
+                accountLockout: false,
+                accountState: 'trial'
             };
             console.log("just before sending to mongo");
             console.log(company1);
