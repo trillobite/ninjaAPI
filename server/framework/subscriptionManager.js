@@ -1,11 +1,51 @@
-var Company = require('mongoose').model('Company');
 var q = require('q');
 
 module.exports = {
     company: undefined,
     state: undefined,
+    initialize: function(companyId, dataSource) {
+        var self = this;
+        self.DataSource = dataSource;
+        var deferred = q.defer();
+        
+        self.DataSource.findById({_id: companyId}).exec(function(err, company){
+            if (err) {
+                deferred.reject(new Error(err))
+            }
+            self.company = company;
+            self.states.pending.initialize(self);
+            self.states.trial.initialize(self);
+            self.states.current.initialize(self);
+            
+            self.state = self.states[company.accountState];
+            deferred.resolve();
+            
+        });
+        
+        return deferred.promise;
+        
+    },
+    
+    // methods that get delegated to the current state
+    verifyCode: function(code){
+        this.state.verifyCode(code);
+    },
+    submitPayment: function(payment){
+        this.state.submitPayment(payment);
+    },
+    changeState: function(state) {
+        if(this.state !== state) {
+            this.state = state;
+        }
+    },
+    // each state implements the interface above
     states: {
         pending: {
+            // submit verfication code
+            // submit credit card
+            // submit card deline
+            // create recurring subscription
+            // submit cancellation
             initialize: function(target){
                 this.target = target;
             },
@@ -52,35 +92,6 @@ module.exports = {
                 console.log('payment has been submitted');
                 console.log(payment);
             }
-        }
-    },
-    initialize: function(companyId) {
-        var self = this;
-        var deferred = q.defer();
-        
-        Company.findById({_id: companyId}).exec(function(err, company){
-            
-            self.company = company;
-            self.states.pending.initialize(self);
-            self.states.trial.initialize(self);
-            self.states.current.initialize(self);
-            self.state = self.states[company.accountState];
-            deferred.resolve();
-            
-        });
-        
-        return deferred.promise;
-        
-    },
-    verifyCode: function(code){
-        this.state.verifyCode(code);
-    },
-    submitPayment: function(payment){
-        this.state.submitPayment(payment);
-    },
-    changeState: function(state) {
-        if(this.state !== state) {
-            this.state = state;
         }
     }
 };

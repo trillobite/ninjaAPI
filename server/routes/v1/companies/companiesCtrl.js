@@ -6,7 +6,7 @@ var sm = require('../../../framework/subscriptionManager');
 
 exports.verifyCompany = function(req, res, next){
     
-    sm.initialize(req.params.id).then(function(){
+    sm.initialize(req.params.id, Company).then(function(){
         sm.verifyCode(req.body.pendingVerificationCode);
         
         res.send('in controller');

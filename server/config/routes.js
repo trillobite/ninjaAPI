@@ -1,16 +1,7 @@
 var auth = require('./auth');
 var companiesController = require('../routes/v1/companies/companiesCtrl');
 var routesIndex = require('../routes/index');
-// var navigationRoutes = require('../routes/api_navigation');
-//var userRoutes = require('../routes/api_users.js');
-// var contractRoutes = require('../routes/api_contracts.js');
-// var customerRoutes = require('../routes/api_customers.js');
-//var companyRoutes = require('../routes/api_companies.js');
-// var bidRoutes = require('../routes/api_bids.js');
-// var menuRoutes = require('../routes/api_menus.js');
-// var menuItemRoutes = require('../routes/api_menuItems.js');
-// var menuGroupRoutes = require('../routes/api_menuGroups.js');
-// var lookupsRoutes = require('../routes/api_lookups.js');
+
 
     
 
@@ -18,6 +9,7 @@ module.exports = function (app) {
     // defining routes on the passed in express app
     
     // handle the one api route that requires no authentication
+    // This sets up CORS
     app.use(function(req,res,next){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -25,7 +17,9 @@ module.exports = function (app) {
         next();
     });
     app.options('*', function(req,res,next){ res.send(200);});
+    // 
     app.post('/api/v1/companies', companiesController.createCompany);
+    
     
     // lockout api without authenticated user.  passport puts a user object
     // on the req object...so if its not there there is no authenticated user
@@ -38,9 +32,7 @@ module.exports = function (app) {
     //     //     res.sendStatus(403);
     //     // }
     // });
-    // app.get('/api/v1/users', function(req,res){
-    //     res.send({data: 'data'});
-    // });
+    
     
     app.post('/api/v1/login', auth.authenticate2);
     app.post('/api/v1/logout', function(req, res){
@@ -51,29 +43,9 @@ module.exports = function (app) {
         req.logout();
         res.end();
     });
+    
     app.use('/api', routesIndex);
-    //api routes with pointers to custom routers
-    // app.use('/api/navigation', navigationRoutes);
-    // app.use('/api/contracts', contractRoutes);
-    //app.use('/api/users', userRoutes);
-    // app.use('/api/customers', customerRoutes);
-    //app.use('/api/companies', companyRoutes);
-    // app.use('/api/bids', bidRoutes);
-    // app.use('/api/menus', menuRoutes);
-    // app.use('/api/menuItems', menuItemRoutes);
-    // app.use('/api/menuGroups', menuGroupRoutes);
-    // app.use('/api/lookups', lookupsRoutes);
     
-    // Partials
-    // app.get('/partials/*', function (req, res) {
-    //     res.render('../../public/app/' + req.params[0]);
-    // });
-
-    // Login and Logout
-    // the post to /login is where passport adds the req.user to the req object
-    
-    // API
-    // any undefined api route returns 404
     app.all('/api/*', function (req, res) {
         res.sendStatus(404);
     });

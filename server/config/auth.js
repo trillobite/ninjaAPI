@@ -12,12 +12,12 @@ exports.authenticate2 = function(req, res, next) {
         
         if (err) throw err;
         if(!user) {
-            res.json({success: false, message: 'Authentication failed. User not fount'});
+            res.json({success: false, message: 'Authentication failed. Username and password combination no worky!'});
         }
         else if (user) {
             
             if(!user.authenticate(pwd)) {
-                res.json({success: false, message: "Authentication failed. Wrong password"});
+                res.json({success: false, message: "Authentication failed. Username and Password combination no worky!"});
             } else {
                 var token = jwt.sign(user, config.secret, {
                     expiresInMinutes: 1440 //24hours

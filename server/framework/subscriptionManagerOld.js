@@ -21,7 +21,7 @@ var SubscriptionManager = function(companyId){
     
     self.changeState = function(state){
         self.currentState = state;
-    }
+    };
     
     return deferred.promise;
 };

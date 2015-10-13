@@ -30,7 +30,7 @@ module.exports = function (config) {
     schemas.seedDb.createDefaultCompany()
         .then(function(companyId) {
             seedCompanyId = companyId;
-            console.log('in create default companies promise')
+            console.log('in create default companies promise');
             schemas.seedDb.createDefaultUsers(companyId);
                 
         });
