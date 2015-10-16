@@ -39,10 +39,10 @@ module.exports = function (app) {
         res.send({success: true});
     });
     // on logout passport removes req.user so that it is undefined in the response thus manking front end "logged out"
-    app.post('/api/v1/logout', function (req, res) {
-        req.logout();
-        res.end();
-    });
+    // app.post('/api/v1/logout', function (req, res) {
+    //     req.logout();
+    //     res.end();
+    // });
     
     app.use('/api', routesIndex);
     
