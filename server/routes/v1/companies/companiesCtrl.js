@@ -1,5 +1,8 @@
 var Company = require('mongoose').model('Company');
+
 var User = require('mongoose').model('User');
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var config = require('../../../config/config')[env];
 var nodemailer = require('nodemailer');
 var encrypt = require('../../../utilities/encryption');
 var sm = require('../../../framework/subscriptionManager');
@@ -74,8 +77,8 @@ exports.createCompany = function (req, res, next) {
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'banquet.ninja@gmail.com',
-                pass: 'BailyRobertson'
+                user: config.email_un,
+                pass: config.email_pw
             }
         });
         var mailOptions = {
