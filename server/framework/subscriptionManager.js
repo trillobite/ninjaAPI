@@ -1,97 +1,110 @@
 var q = require('q');
 
-module.exports = {
-    company: undefined,
+var subscriptionManager = {
     state: undefined,
-    initialize: function(companyId, dataSource) {
-        var self = this;
-        self.DataSource = dataSource;
-        var deferred = q.defer();
-        
-        self.DataSource.findById({_id: companyId}).exec(function(err, company){
-            if (err) {
-                deferred.reject(new Error(err))
+    company: undefined,
+    states: {
+        pending: {
+            initialize: function(context) {
+                this.context = context;
+            },
+            verifyCode: function(code) {
+                    
+                    var deferred = q.defer();
+                    var self = this;
+                    var Company = this.context.company;
+                    if (Company.pendingVerificationCode == code){
+                        Company.accountState = 'awaitingFirstPayment';
+                        Company.save(function(err){
+                            if(err){
+                                deferred.reject('Something went wrong with the save method');
+                            } else {
+                                self.context.changeState(self.context.states.awaitingFirstPayment);
+                                deferred.resolve('Account has moved to awaiting first payament state.');
+                            }
+                        });
+                    } else {
+                        deferred.reject('Account is not verified...');
+                    }
+                    return deferred.promise;
+            },
+            runFirstPayment: function(payment) {
+                var deferred = q.defer();
+                deferred.reject('Account is not verified.');
+                return deferred.promise;
             }
-            self.company = company;
-            self.states.pending.initialize(self);
-            self.states.trial.initialize(self);
-            self.states.current.initialize(self);
-            
-            self.state = self.states[company.accountState];
-            deferred.resolve();
-            
-        });
-        
+        },
+        awaitingFirstPayment: {
+            initialize: function(context){
+                this.context = context;
+            },
+            verifyCode: function(code) {
+                    var deferred = q.defer();
+                    deferred.reject('The company is already verified.');  
+                    return deferred.promise;
+            },
+            runFirstPayment: function(payment) {
+                var deferred = q.defer();
+                var self = this;
+                var Company = self.context.company;
+                // if payment succeeds
+                if (true){
+                        Company.accountState = 'trial';
+                        Company.save(function(err){
+                            if(err){
+                                deferred.reject('Something went wrong with the save method');
+                            } else {
+                                self.context.changeState(self.context.states.trial);
+                                deferred.resolve('payment succeeded...moving to trial state.');
+                            }
+                        });
+                    } else {
+                        deferred.reject('payment failed...');
+                    }
+                return deferred.promise;
+            }
+        },
+        trial: {
+            initialize: function(context){
+                this.context = context;
+            },
+            verifyCode: function(code) {
+                var deferred = q.defer();
+                deferred.reject('The company is already verified.');  
+                return deferred.promise;
+            },
+            runFirstPayment: function(payment) {
+                var deferred = q.defer();
+                deferred.reject('The company has already made the first payment.');  
+                return deferred.promise;
+            }
+        }
+    },
+    initialize: function(company){
+        var deferred = q.defer();
+        if (company.constructor.name === 'model') {
+            this.company = company;
+            this.states.pending.initialize(this);
+            this.states.trial.initialize(this);
+            this.states.awaitingFirstPayment.initialize(this);
+            this.state = this.states[company.accountState];
+            deferred.resolve('SubscriptionManager is intialized');
+        } else {
+            deferred.reject('You can only instantiate the subscription manager with a mongoose Company model');
+        }
         return deferred.promise;
-        
     },
-    
-    // methods that get delegated to the current state
     verifyCode: function(code){
-        this.state.verifyCode(code);
+        return this.state.verifyCode(code);
     },
-    submitPayment: function(payment){
-        this.state.submitPayment(payment);
+    runFirstPayment: function(payment){
+        return this.state.runFirstPayment(payment);
     },
     changeState: function(state) {
         if(this.state !== state) {
             this.state = state;
         }
-    },
-    // each state implements the interface above
-    states: {
-        pending: {
-            // submit verfication code
-            // submit credit card
-            // submit card deline
-            // create recurring subscription
-            // submit cancellation
-            initialize: function(target){
-                this.target = target;
-            },
-            verifyCode: function (code) {
-                var deferred = q.defer();
-                var Company = this.target.company;
-                if (Company.pendingVerificationCode == code){
-                    Company.accountState = 'trial';
-                    this.target.changeState(this.target.states.trial);
-                    Company.save(function(err){
-                        
-                        deferred.resolve();
-                    });
-                }
-                
-                
-                return deferred.promise;
-            },
-            submitPayment: function(payment) {
-                console.log('cant accept the payment yet');
-            }
-        },
-        trial: {
-            initialize: function(target){
-                this.target = target;
-            },
-            verifyCode: function (code) {
-                console.log('already verified');
-            },
-            submitPayment: function(payment) {
-                console.log('submitting payment');
-                
-                this.target.changeState(this.target.states.current);
-            }
-        },
-        current: {
-            initialize: function(target){
-                this.target = target;
-            },
-            verifyCode: function (code) {
-                console.log('already verified');
-            },
-            submitPayment: function(payment) {
-                console.log('payment has been submitted');
-                console.log(payment);
-            }
-        }
     }
 };
+
+module.exports = subscriptionManager;

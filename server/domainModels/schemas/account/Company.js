@@ -29,7 +29,7 @@ var companySchema = new mongoose.Schema({
     dueCurrent: Boolean,
     accountLockout: Boolean,
     pendingVerificationCode: Number,
-    accountState: {type: String, enum: ['pending', 'trial', 'current', 'delinquent', 'lockout']}
+    accountState: {type: String, enum: ['pending', 'awaitingFirstPayment', 'trial', 'current', 'delinquent', 'lockout']}
     
     // accountPending > accountTrial > accountCurrent > accountDelinquent > accountLockout
 });

@@ -28,4 +28,4 @@ gulp.task('watch-mocha', function(){
 });
 
 
-gulp.task('default', ['lint', 'watch-mocha']);
+gulp.task('default', ['lint']);

@@ -11,7 +11,7 @@ router.use(tokenProtection);
 
 // Base Route /api/companies
 router.get('/', controller.getCompanies);
-router.put('/:id/verify', controller.verifyCompany);
+//router.put('/:id/verify', controller.verifyCompany);
 router.get('/:id', controller.getCompanyById);
 // post request creates a new company and new admin user account
 //router.post('/', controller.createCompany);

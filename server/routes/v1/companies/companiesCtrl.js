@@ -6,10 +6,30 @@ var sm = require('../../../framework/subscriptionManager');
 
 exports.verifyCompany = function(req, res, next){
     
-    sm.initialize(req.params.id, Company).then(function(){
-        sm.verifyCode(req.body.pendingVerificationCode);
+    Company.findById({_id: req.params.id}).exec(function(err, company){
+        sm.initialize(company).then(function(){
+            return sm.verifyCode(req.body.pendingVerificationCode);
+        }).then(function(msg){
+                res.send({success:true, msg: msg});
+            }, function(msg){
+                res.send({success: false, msg: msg});
+            });
+    });
+    
+};
+
+exports.runFirstPayment = function(req, res, next){
+    
+    Company.findById({_id: req.params.id}).exec(function(err, company){
         
-        res.send('in controller');
+        sm.initialize(company).then(function(msg){
+            console.log(msg);
+            return sm.runFirstPayment(req.body.cardInfo);
+        }).then(function(msg){
+                res.send({success:true, msg: msg});
+            }, function(msg){
+                res.send({success: false, msg: msg});
+            });
     });
     
 };

@@ -38,6 +38,8 @@ module.exports = function (app) {
     app.post('/api/v1/logout', function(req, res){
         res.send({success: true});
     });
+    app.post('/api/v1/companies/:id/verify', companiesController.verifyCompany);
+    app.post('/api/v1/companies/:id/runFirstPayment', companiesController.runFirstPayment);
     // on logout passport removes req.user so that it is undefined in the response thus manking front end "logged out"
     // app.post('/api/v1/logout', function (req, res) {
     //     req.logout();

@@ -1,11 +1,13 @@
 var passport = require('passport');
 var rolesRepository = require('./rolesRepository');
 var User = require('mongoose').model('User');
+var Company = require('mongoose').model('Company');
 var jwt = require('jsonwebtoken');
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
 
 //this is using jsonwebtoken
+
 exports.authenticate2 = function(req, res, next) {
     User.findOne({username: req.body.username.toLowerCase()}, function(err, user){
         var pwd = req.body.password;
