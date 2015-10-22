@@ -31,7 +31,7 @@ var companySchema = new mongoose.Schema({
     pendingVerificationCode: Number,
     accountState: {type: String, enum: ['pending', 'awaitingFirstPayment', 'trial', 'current', 'delinquent', 'lockout']}
     
-    // accountPending > accountTrial > accountCurrent > accountDelinquent > accountLockout
+    
 });
 
 companySchema.methods = {
