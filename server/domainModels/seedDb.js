@@ -15,7 +15,7 @@ function createDefaultCompany() {
             var company1 = {
                 companyName: "Old Town Dining, LLC",
                 addresses: [{
-                    addressType: "Headquarters",
+                    addressType: "headquarters",
                     primary: true,
                     address1: "28699 Old Town Front Street",
                     city: "Temecula",
@@ -23,17 +23,16 @@ function createDefaultCompany() {
                     zip: "92592"
                 }],
                 emails: [{
-                    emailType: "Headquarters",
+                    emailType: "accountAdmin",
                     primary: true,
                     email: "chris@oldtowndining.com"
                 }],
-                contactNumbers: [{ primary: true, contactType: "Main", number: "9516769567" }],
+                contactNumbers: [{ primary: true, contactType: "admin", number: "9516769567" }],
                 duesCurrent: true,
                 accountLockout: false,
-                accountState: 'trial'
+                accountState: 'created'
             };
-            console.log("just before sending to mongo");
-            console.log(company1);
+            
             Company.create(company1, function (err, company) {
                 if (err) {
                     console.log('i have an error');

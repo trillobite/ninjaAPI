@@ -16,7 +16,7 @@ var userSchema = new mongoose.Schema({
     //adding security fields here
     salt: {type:String, required:"{PATH} is required!"},
     hashed_pwd: {type:String, required:"{PATH} is required!"},
-    roles: [String]
+    roles: [{type:String, enum: ['superUser', 'admin', 'gold', 'silver', 'bronze']}]
 
 });
 

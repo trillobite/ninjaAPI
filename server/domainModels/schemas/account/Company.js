@@ -8,7 +8,7 @@ var companySchema = new mongoose.Schema({
         unique: true
     },
     addresses: [{
-        addressType: String,
+        addressType: {type:String, enum: ['subscriptionBilling', 'headquarters', 'additionalLocation']},
         primary: Boolean,
         address1: String,
         address2: String,
@@ -17,19 +17,20 @@ var companySchema = new mongoose.Schema({
         zip: { type: String, validate: validate.validators.zipCodeValidator }
     }],
     emails: [{
-        emailType: String,
+        emailType: {type: String, enum: ['accountAdmin']},
         primary: Boolean,
         email: { type: String, validate: validate.validators.emailValidator }
     }],
     contactNumbers: [{
         primary: Boolean,
-        contactType: String,
-        number: { type: String }
+        contactType: {type:String, enum: ['admin']},
+        contactNumber: { type: String }
     }],
     dueCurrent: Boolean,
     accountLockout: Boolean,
     pendingVerificationCode: Number,
-    accountState: {type: String, enum: ['pending', 'awaitingFirstPayment', 'trial', 'current', 'delinquent', 'lockout']}
+    returningCustomer: Boolean,
+    accountState: {type: String, enum: ['created', 'pending', 'awaitingFirstPayment', 'trial', 'current', 'delinquent', 'lockout', 'cancelled']}
     
     
 });

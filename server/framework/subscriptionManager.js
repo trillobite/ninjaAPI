@@ -1,9 +1,32 @@
 var q = require('q');
+var cm = require('./companyManager');
 
 var subscriptionManager = {
     state: undefined,
     company: undefined,
     states: {
+        createNewAccount: {
+            initialize: function(context) {
+                this.context = context;
+            },
+            createNewAccount: function(signUpInfo) {
+                var deferred = q.defer();
+                cm.createNewCompany(signUpInfo).then(
+                    function(company){
+                        deferred.resolve(company);
+                    },
+                    function(err){
+                        deferred.reject({message: "the company manager failed to create a company"})
+                    }
+                )
+                
+                return deferred.promise;
+                
+                // use company manager to create a new account
+                // if successful resolve promise with the company
+                // if fail reject promise with error message
+            }
+        },
         pending: {
             initialize: function(context) {
                 this.context = context;
@@ -82,11 +105,14 @@ var subscriptionManager = {
     },
     initialize: function(company){
         var deferred = q.defer();
+        // test if the company passed in is a mongoose model
         if (company.constructor.name === 'model') {
             this.company = company;
+            // each state is initialized with this for the context
             this.states.pending.initialize(this);
             this.states.trial.initialize(this);
             this.states.awaitingFirstPayment.initialize(this);
+            // get the current state
             this.state = this.states[company.accountState];
             deferred.resolve('SubscriptionManager is intialized');
         } else {
@@ -94,12 +120,18 @@ var subscriptionManager = {
         }
         return deferred.promise;
     },
+    
+    // methods delegated to the active state
+    createNewAccount: function(signUpInfo) {
+        return this.state.createNewAccount(signUpInfo);
+    },
     verifyCode: function(code){
         return this.state.verifyCode(code);
     },
     runFirstPayment: function(payment){
         return this.state.runFirstPayment(payment);
     },
+    // change state method
     changeState: function(state) {
         if(this.state !== state) {
             this.state = state;
