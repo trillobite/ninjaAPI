@@ -1,5 +1,6 @@
 var q = require('q');
 var cm = require('./companyManager');
+var pm = require('./paymentManager');
 
 var subscriptionManager = {
     state: undefined,
@@ -16,9 +17,9 @@ var subscriptionManager = {
                         deferred.resolve(company);
                     },
                     function(err){
-                        deferred.reject({message: "the company manager failed to create a company"})
+                        deferred.reject({message: "the company manager failed to create a company"});
                     }
-                )
+                );
                 
                 return deferred.promise;
                 
@@ -70,20 +71,20 @@ var subscriptionManager = {
                 var deferred = q.defer();
                 var self = this;
                 var Company = self.context.company;
-                // if payment succeeds
-                if (true){
-                        Company.accountState = 'trial';
-                        Company.save(function(err){
-                            if(err){
-                                deferred.reject('Something went wrong with the save method');
-                            } else {
-                                self.context.changeState(self.context.states.trial);
-                                deferred.resolve('payment succeeded...moving to trial state.');
-                            }
-                        });
-                    } else {
-                        deferred.reject('payment failed...');
-                    }
+                pm.processOneTime(payment).then(function(){
+                    Company.accountState = 'trial';
+                    Company.save(function(err){
+                        if(err){
+                            deferred.reject('Something went wrong with the save method');
+                        } else {
+                            self.context.changeState(self.context.states.trial);
+                            deferred.resolve('payment succeeded...moving to trial state.');
+                        }
+                    });
+                }, function(){
+                    deferred.reject('payment failed...');
+                });
+                
                 return deferred.promise;
             }
         },

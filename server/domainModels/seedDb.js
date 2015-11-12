@@ -30,7 +30,7 @@ function createDefaultCompany() {
                 contactNumbers: [{ primary: true, contactType: "admin", number: "9516769567" }],
                 duesCurrent: true,
                 accountLockout: false,
-                accountState: 'created'
+                accountState: 'awaitingFirstPayment'
             };
             
             Company.create(company1, function (err, company) {

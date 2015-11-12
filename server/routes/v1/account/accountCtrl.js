@@ -5,13 +5,23 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var config = require('../../../config/config')[env];
 var nodemailer = require('nodemailer');
 var encrypt = require('../../../utilities/encryption');
-var cm = require('../../../framework/companyManager');
-var sm = require('../../../framework/subscriptionManager');
+var companyManager = require('../../../framework/companyManager');
+var subscriptionManager = require('../../../framework/subscriptionManager');
 
 exports.createNewAccount = function (req, res, next) {
     
-    cm.createNewCompany(req.body).then(function(company){
-        res.send('success i created a company');
+    companyManager.createNewCompany(req.body).then(function(company){
+        subscriptionManager.initialize(company).then(function(){
+            subscriptionManager.runFirstPayment(req.body).then(function(){
+                res.send('success i created a company');
+            },function(){
+                res.send('i failed to process a payment');
+            });
+        },function(){
+            res.send('i failed to initialize the subscription manger');
+        })
+        
+        
     }, function (err) {
         res.send('i failed to create a company');
     });

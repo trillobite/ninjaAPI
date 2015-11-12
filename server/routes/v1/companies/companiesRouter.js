@@ -5,12 +5,14 @@ var controller = require('./companiesCtrl');
 var tokenProtection = require('../../../config/routeMiddleware');
 
 
+router.get('/', controller.getCompanies);
+
 // routes above here are unprotected
 router.use(tokenProtection);
 
 
 // Base Route /api/companies
-router.get('/', controller.getCompanies);
+
 //router.put('/:id/verify', controller.verifyCompany);
 router.get('/:id', controller.getCompanyById);
 // post request creates a new company and new admin user account

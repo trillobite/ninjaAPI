@@ -3,7 +3,9 @@ var crypto = require('crypto');
 
 
 exports.createSalt = function () {
-    return crypto.randomBytes(128).toString('base64');
+    var randomBytes = crypto.randomBytes(128).toString('base64');
+    
+    return randomBytes;
 };
 
 exports.hashPwd = function (salt, pwd) {

@@ -18,8 +18,8 @@ module.exports = function (app) {
     });
     app.options('*', function(req,res,next){ res.send(200);});
     // 
-    app.post('/api/v1/companies', companiesController.createCompany);
-    app.post('/api/v1/createAccount', companiesController.createNewAccount);
+    // app.post('/api/v1/companies', companiesController.createCompany);
+    // app.post('/api/v1/createAccount', companiesController.createNewAccount);
     
     // lockout api without authenticated user.  passport puts a user object
     // on the req object...so if its not there there is no authenticated user
@@ -34,14 +34,14 @@ module.exports = function (app) {
     // });
     
     
-    app.post('/api/v1/login', auth.authenticate2);
-    app.post('/api/v1/logout', function(req, res){
-        // I believe we need to destroy the token before sending success
-        res.send({success: true});
-    });
+    // app.post('/api/v1/login', auth.authenticate2);
+    // app.post('/api/v1/logout', function(req, res){
+    //     // I believe we need to destroy the token before sending success
+    //     res.send({success: true});
+    // });
     
-    app.post('/api/v1/companies/:id/verify', companiesController.verifyCompany);
-    app.post('/api/v1/companies/:id/runFirstPayment', companiesController.runFirstPayment);
+    // app.post('/api/v1/companies/:id/verify', companiesController.verifyCompany);
+    // app.post('/api/v1/companies/:id/runFirstPayment', companiesController.runFirstPayment);
     
     // on logout passport removes req.user so that it is undefined in the response thus manking front end "logged out"
     // app.post('/api/v1/logout', function (req, res) {
