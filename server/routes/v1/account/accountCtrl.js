@@ -10,6 +10,13 @@ var subscriptionManager = require('../../../framework/subscriptionManager');
 
 exports.createNewAccount = function (req, res, next) {
     
+    // here we create a new company which also creates a new admin user
+    // a company is useless without an admin user which is why we do it that way
+    // promise is retured and if sucessful we pass the created company mongoose object
+    // to the subscription manager.  I think we could de-promisify the intialize function
+    // as it is not asynchronous.  Should just return itself so we can then dot into 
+    // runFirstPayment.  runFirstPayment if successful is the end of the workflow.
+    
     companyManager.createNewCompany(req.body).then(function(company){
         subscriptionManager.initialize(company).then(function(){
             subscriptionManager.runFirstPayment(req.body).then(function(){
