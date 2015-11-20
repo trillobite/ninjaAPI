@@ -128,7 +128,16 @@ exports.getCompanyById = function (req, res) {
 };
 
 exports.getCompanies = function (req, res) {
-    Company.find({}).lean().exec(function (err, collection) {
+    var select = req.query.select || '_id companyName addresses';
+    var where = {};
+    if(req.query.where){
+        where[req.query.where] = req.query.value;
+    }
+    
+    if(req.query.select === 'all'){
+        select = '';
+    }
+    Company.find(where,select).lean().exec(function (err, collection) {
         res.send(collection);
     });
 };
