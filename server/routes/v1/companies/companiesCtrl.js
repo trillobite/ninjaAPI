@@ -98,9 +98,6 @@ exports.createCompany = function (req, res, next) {
             subject: 'account verification',
             text: 'here is your code: ' + random
         };
-        
-        
-        
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
                 console.log(error);
@@ -109,13 +106,7 @@ exports.createCompany = function (req, res, next) {
                 res.send(newAccount);
             }
         });
-            
         });
-        
-        
-        
-        
-        
     });
 
     
