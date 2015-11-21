@@ -1,6 +1,7 @@
 var auth = require('./auth');
 var companiesController = require('../routes/v1/companies/companiesCtrl');
 var routesIndex = require('../routes/index');
+var Company = require('mongoose').model('Company');
 
 
     
@@ -48,6 +49,12 @@ module.exports = function (app) {
     //     req.logout();
     //     res.end();
     // });
+    app.get('/api/v1/wakeup', function(req, res){
+        Company.find({companyName: 'Old Town Dining, LLC'}).lean().exec(function (err, collection) {
+            res.send({message: "I am awake!"});
+        });
+       
+    });
     
     app.use('/api', routesIndex);
     
