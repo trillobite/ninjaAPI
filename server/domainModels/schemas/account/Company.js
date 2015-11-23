@@ -3,10 +3,10 @@ var validate = require('../validators');
 
 var companySchema = new mongoose.Schema({
     companyName: {
-        type: String,
-        required: 'Company Name is required.',
+        type:String,
+        required:'Company Name is required',
         unique: true
-    },
+        },
     addresses: [{
         addressType: {type:String, enum: ['subscriptionBilling', 'headquarters', 'additionalLocation']},
         primary: Boolean,
@@ -14,12 +14,15 @@ var companySchema = new mongoose.Schema({
         address2: String,
         city: String,
         state: { type: String, enum: validate.validators.stateCodes },
-        zip: { type: String, validate: validate.validators.zipCodeValidator }
+        zip: { type: String, 
+            validate: validate.validators.zipCodeValidator }
     }],
     emails: [{
         emailType: {type: String, enum: ['accountAdmin']},
         primary: Boolean,
-        email: { type: String, validate: validate.validators.emailValidator }
+        email: { type: String,
+            trim: true, 
+            validate: validate.validators.emailValidator }
     }],
     contactNumbers: [{
         primary: Boolean,
@@ -30,8 +33,9 @@ var companySchema = new mongoose.Schema({
     accountLockout: Boolean,
     pendingVerificationCode: Number,
     returningCustomer: Boolean,
-    accountState: {type: String, enum: ['created', 'pending', 'awaitingFirstPayment', 'trial', 'current', 'delinquent', 'lockout', 'cancelled']}
-    
+    accountState: {type: String, 
+        enum: ['created', 'pending', 'awaitingFirstPayment', 
+            'trial', 'current', 'delinquent', 'lockout', 'cancelled']}
     
 });
 

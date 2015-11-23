@@ -13,6 +13,19 @@ exports.getUsers = function(req, res){
 
 };
 
+exports.userExists = function(req,res){
+    User.findOne({username: req.params.username}).exec(function(err,item){
+        if(err){
+            res.sendStatus(500).send({err:err, message:"something bad happened"});
+        }
+        if(item){
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+};
+
 exports.createUser = function(req, res, next){
 
     var userData = req.body;

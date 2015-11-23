@@ -3,7 +3,10 @@ var router = express.Router();
 var auth = require('../../../config/auth');
 var controller = require('./usersCtrl');
 var tokenProtection = require('../../../config/routeMiddleware');
-router.use(tokenProtection);
+
+router.get('/exists/:username', controller.userExists);
+
+//router.use(tokenProtection);
 //router.get('/', auth.requiresRole('admin'), controller.getUsers);
 // Base Route /api/users
 //router.get('/', auth.isActivityAuthorized('GET /api/users'), controller.getUsers);
