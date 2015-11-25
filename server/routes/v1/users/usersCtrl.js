@@ -3,11 +3,9 @@ var User = require('mongoose').model('User');
 var encrypt = require('../../../utilities/encryption');
 
 exports.getUsers = function(req, res){
-    console.log('in controller');
-    //company: req.user.company
+    
     User.find({}).select('firstName lastName username company roles').exec(function(err, collection){
-        console.log('in mongoose call');
-        console.log(collection);
+        
         res.send(collection);
     });
 
@@ -29,6 +27,9 @@ exports.userExists = function(req,res){
 exports.createUser = function(req, res, next){
 
     var userData = req.body;
+    if (req.body.password.length < 8){
+        console.log('password is too short');
+    }
     
     userData.username = userData.username.toLowerCase();
     userData.salt = encrypt.createSalt();

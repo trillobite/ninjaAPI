@@ -21,12 +21,14 @@ exports.authenticate2 = function(req, res, next) {
             if(!user.authenticate(pwd)) {
                 res.json({success: false, message: "Authentication failed. Username and Password combination no worky!"});
             } else {
-                var userStripped = user.toObject();
-                delete userStripped.hashed_pwd;
-                delete userStripped.salt;
-                var token = jwt.sign(userStripped, config.secret, {
+                
+                user = user.toObject();
+                delete user.hashed_pwd;
+                delete user.salt;
+                var token = jwt.sign(user, config.secret, {
                     expiresInMinutes: 1440 //24hours
                 });
+                
                 
                 res.json({
                     success: true,

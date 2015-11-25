@@ -71,11 +71,11 @@ function createDefaultUsers(companyId) {
     
     User.find({}).exec(function (err, collection) {
         if (collection.length === 0) {
-            var user1 = encryptPassword({company: companyId, firstName: "nolan", lastName: "james", username: "nolan@nolan.com", roles: ['Bronze'] });
-            var user2 = encryptPassword({ company: companyId, firstName: "chris", lastName: "baily", username: "chris@chris.com", roles: ['admin', 'superUser'] });
-            var user3 = encryptPassword({company: companyId, firstName: "kim", lastName: "rose", username: "kim@kim.com", roles: ['admin']});
-            var user4 = encryptPassword({ company: companyId, firstName: "alex", lastName: "phillips", username: "alex@alex.com", roles: ['Silver'] });
-            var user5 = encryptPassword({company: companyId, firstName: "hayley", lastName: "briana", username: "hayley@hayley.com", roles: ['Gold'] });
+            var user1 = encryptPassword({company: companyId, firstName: "nolan123", lastName: "james", username: "nolan@nolan.com", roles: ['Bronze'] });
+            var user2 = encryptPassword({ company: companyId, firstName: "chris123", lastName: "baily", username: "chris@chris.com", roles: ['admin', 'superUser'] });
+            var user3 = encryptPassword({company: companyId, firstName: "kim12345", lastName: "rose", username: "kim@kim.com", roles: ['admin']});
+            var user4 = encryptPassword({ company: companyId, firstName: "alex1234", lastName: "phillips", username: "alex@alex.com", roles: ['Silver'] });
+            var user5 = encryptPassword({company: companyId, firstName: "hayley12", lastName: "briana", username: "hayley@hayley.com", roles: ['Gold'] });
             
             User.create(user1, user2, user3, user4, user5, function (err, user1, user2, user3, user4, user5){
                 if (err) {

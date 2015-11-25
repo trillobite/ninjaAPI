@@ -1,18 +1,21 @@
 
 var mongoose = require('mongoose');
+var validate = require('../validators');
 var userSchema = new mongoose.Schema({
     firstName: {type:String, 
-            required:"{PATH} is required!"
+            required:"First name is required"
     },
     lastName: {type:String, 
-            required:"{PATH} is required!"
+            required:"Last name is required"
     },
     username: {
             type: String,
-            required: "{PATH} is required.",
-            unique: true
+            required: "A valid email is required",
+            unique: true,
+            validate: validate.validators.emailValidator
     },
-    company: {type:mongoose.Schema.Types.ObjectId, 
+    company: {type:mongoose.Schema.Types.ObjectId,
+            required: 'A user must be associated with a company',
             ref:'Company'},
     //adding security fields here
     salt: {type:String, required:"{PATH} is required!"},
