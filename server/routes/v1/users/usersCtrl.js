@@ -3,8 +3,8 @@ var User = require('mongoose').model('User');
 var encrypt = require('../../../utilities/encryption');
 
 exports.getUsers = function(req, res){
-    
-    User.find({}).select('firstName lastName username company roles').exec(function(err, collection){
+    console.log(req.user.meta.company);
+    User.find({'meta.company':req.user.meta.company}).select('firstName lastName username company roles').exec(function(err, collection){
         
         res.send(collection);
     });

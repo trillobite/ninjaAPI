@@ -1,7 +1,8 @@
 // here is where mongoose gets the models wired up
 var Q = require('q');
 var mongoose = require('mongoose');
-var schemas = require('../domainModels');
+var models = require('../domainModels');
+var seedDb = require('../domainModels/seedDb');
 
 
 // var userModel = require('../models/User');
@@ -27,10 +28,18 @@ module.exports = function (config) {
     //create the mock data here.
     var seedCompanyId;
     
-    schemas.seedDb.createDefaultCompany()
+    seedDb.createDefaultCompany()
         .then(function(companyId) {
             seedCompanyId = companyId;
-            schemas.seedDb.createDefaultUsers(companyId);
+            seedDb.createDefaultUsers(companyId).then(
+                seedDb.createDefaultMenuItems(seedCompanyId)
+                .then(function(items){
+                    seedDb.createDefaultMenu(seedCompanyId, items).then(function(menu){
+                        
+                        seedDb.createDefaultMenuGroup(seedCompanyId, menu);
+                    })
+                })
+            );
                 
         });
     

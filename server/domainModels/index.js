@@ -8,9 +8,10 @@ mongoose.model('User', require('./serverSchemas/User'));
 mongoose.model('Company', require('./schemas/account/Company'));
 // mongoose.model('User', userSchema.schema);
 // mongoose.model('Company', companySchema.schema);
-mongoose.model('Menu', require('./schemas/production/menuSchema'));
+mongoose.model('Menu', require('./schemas/production/Menu'));
 mongoose.model('Venue', require('./schemas/events/venueSchema'));
 mongoose.model('RentalItem', require('./schemas/events/rentalItemSchema'));
-mongoose.model('MenuItem', require('./schemas/production/menuItem'));
+mongoose.model('MenuItem', require('./schemas/production/MenuItem'));
+mongoose.model('MenuGroup', require('./schemas/production/MenuGroup'));
 
 exports.seedDb = require('./seedDb');

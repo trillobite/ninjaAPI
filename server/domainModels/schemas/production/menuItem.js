@@ -1,10 +1,13 @@
 var mongoose = require('mongoose');
-var sharedSchema = require('../sharedSchemas');
+var sharedSchemas = require('../sharedSchemas');
 
 var menuItemSchema = mongoose.Schema({
-    meta: sharedSchema.metaSchema,
+    meta: sharedSchemas.metaSchema,
     name: String,
     description: String,
+    title: String,
+    subTitle: String,
+    summary: String,
     category: String,
    
     variations: [{name:String,description:String}],

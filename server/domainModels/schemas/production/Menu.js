@@ -22,16 +22,13 @@ var menuSectionSchema = new mongoose.Schema({
 
 
 var menuSchema = new mongoose.Schema({
-        // meta: {
-        //     name: {type: String, required: "{PATH} is required."},
-        //     description: String,
-        //     dateCreated: { type: Date, default: Date.now },
-        //     lastModified: {type: Date, default: Date.now}
-        // },
+        
         meta: sharedSchema.metaSchema,
-        company: {type:mongoose.Schema.Types.ObjectId, ref:'Company'},
+        name: String,
+        description: String,
         title: {type: String, required: "{PATH} is required."},
         subtitle: String,
+        summary: String,
         sections: [menuSectionSchema],
         footer: String
 });
