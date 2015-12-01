@@ -19,7 +19,8 @@ exports.getMenuItemById = function (req, res) {
 
 exports.createMenuItem = function (req, res, next) {
     var menuItemData = req.body;
-    menuItemData.company = req.user.meta.company;
+    // set the meta company
+    menuItemData.meta = {company: req.user.meta.company};
     MenuItem.create(menuItemData, function (err, menuItem) {
         if (err) {
             res.status(400);
