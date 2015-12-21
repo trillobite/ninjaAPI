@@ -31,15 +31,19 @@ module.exports = function (config) {
     seedDb.createDefaultCompany()
         .then(function(companyId) {
             seedCompanyId = companyId;
+            seedDb.createDefaultLookups(seedCompanyId);
             seedDb.createDefaultUsers(companyId).then(
+                
                 seedDb.createDefaultMenuItems(seedCompanyId)
                 .then(function(items){
                     seedDb.createDefaultMenu(seedCompanyId, items).then(function(menu){
                         
                         seedDb.createDefaultMenuGroup(seedCompanyId, menu);
+                        
                     })
                 })
-            );
+            )
+            
                 
         });
     

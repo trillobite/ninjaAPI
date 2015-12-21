@@ -1,3 +1,3 @@
-exports.menugroups = require('./MenuGroup');
-exports.menus = require('./Menu');
-exports.menuitems = require('./MenuItem');
+exports.menugroup = require('./MenuGroup');
+exports.menu = require('./Menu');
+exports.menuitem = require('./MenuItem');
