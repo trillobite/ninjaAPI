@@ -1,0 +1,3 @@
+[submodule "server/domainModels/schemas"]
+	path = server/domainModels/schemas
+	url = https://github.com/Robertson74/NinjaSchemas.git
