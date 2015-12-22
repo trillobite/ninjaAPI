@@ -36,6 +36,7 @@ function createAccountAdmin (newUser) {
     newUser.username = newUser.username.toLowerCase();
     newUser.salt = encrypt.createSalt();
     newUser.hashed_pwd = encrypt.hashPwd(newUser.salt, newUser.password);
+    newUser.roles = ['admin'];
     User.create(newUser, function(err, user){
         if (err){
             if(err.toString().indexOf('E11000')>-1){
