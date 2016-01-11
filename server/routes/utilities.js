@@ -4,8 +4,8 @@ exports.getCollectionCallback = function(err, collection, res){
             return res.send({reason: err.toString()})
         }
         if (!collection.length) {
-            res.status(404);
-            return res.send({noData: true})
+            //res.status(404);
+            return res.send({noData: true, data: collection})
         }
         res.send({data:collection});
 }
@@ -17,7 +17,7 @@ exports.getItemCallback = function(err, object, res){
         }
         if (!object) {
             res.status(404);
-            return res.send({noData: true})
+            return res.send({noData: true, data: object})
         }
         res.send({data:object});
 }
