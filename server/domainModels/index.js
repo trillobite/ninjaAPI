@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 // register the models with the imported schemas
 mongoose.model('User', require('./serverSchemas/User'));
 mongoose.model('Company', require('./schemas/account/Company'));
-mongoose.model('Lookups', require('./schemas/account/Lookups'));
+mongoose.model('Lookups', require('./schemas/common/Lookups'));
 // mongoose.model('User', userSchema.schema);
 // mongoose.model('Company', companySchema.schema);
 mongoose.model('Menu', require('./schemas/production/Menu'));
