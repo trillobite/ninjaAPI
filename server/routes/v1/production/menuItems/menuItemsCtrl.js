@@ -34,13 +34,13 @@ exports.createMenuItem = function (req, res, next) {
 exports.updateMenuItem = function (req, res) {
     delete req.body._id;
     
-    MenuItem.findByIdAndUpdate({ _id: req.params.id }, req.body, function (err, menuItem) {
+    MenuItem.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, menuItem) {
         if (err) {
             console.log(err);
             res.status(400);
             return res.send({ reason: err.toString() });
         }
-        res.send(menuItem.toObject());
+        res.send({data: menuItem.toObject()});
     });
 };
 

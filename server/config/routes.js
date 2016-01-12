@@ -22,7 +22,7 @@ module.exports = function (app) {
     app.options('*', function(req,res,next){ res.send(200);});
     
     //simulate network latency!!!!
-    //app.use(function(req,res,next){setTimeout(next,5000)});
+    app.use(function(req,res,next){setTimeout(next,2000)});
     // 
     // app.post('/api/v1/companies', companiesController.createCompany);
     // app.post('/api/v1/createAccount', companiesController.createNewAccount);
