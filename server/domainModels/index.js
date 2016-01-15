@@ -1,18 +1,16 @@
 var mongoose = require('mongoose');
 
-// import schemas
-//var companySchema = require('./schemas/account/Company');
-//var userSchema = require('./schemas/account/User');
-// register the models with the imported schemas
+
 mongoose.model('User', require('./serverSchemas/User'));
-mongoose.model('Company', require('./schemas/account/Company'));
-mongoose.model('Lookups', require('./schemas/account/Lookups'));
-// mongoose.model('User', userSchema.schema);
-// mongoose.model('Company', companySchema.schema);
-mongoose.model('Menu', require('./schemas/production/Menu'));
-mongoose.model('Venue', require('./schemas/events/venueSchema'));
-mongoose.model('RentalItem', require('./schemas/events/rentalItemSchema'));
-mongoose.model('MenuItem', require('./schemas/production/MenuItem'));
+mongoose.model('Company', require('./schemas/account/CompanySchema'));
+mongoose.model('Lookups', require('./schemas/account/LookupsSchema'));
+mongoose.model('Venue', require('./schemas/production/VenueSchema'));
+mongoose.model('RentalItem', require('./schemas/production/RentalItemSchema'));
+mongoose.model('MenuItem', require('./schemas/production/MenuItemSchema'));
+mongoose.model('Contract', require('./schemas/production/ContractSchema'));
+mongoose.model('Menu', require('./schemas/production/MenuSchema'));
 mongoose.model('MenuGroup', require('./schemas/production/MenuGroup'));
+mongoose.model('Customer', require('./schemas/customer/CustomerSchema'));
+
 
 exports.seedDb = require('./seedDb');
