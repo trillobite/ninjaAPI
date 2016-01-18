@@ -1,16 +1,16 @@
 var mongoose = require('mongoose');
+var schemas = require('./schemas');
 
-
-mongoose.model('User', require('./serverSchemas/User'));
-mongoose.model('Company', require('./schemas/account/CompanySchema'));
-mongoose.model('Lookups', require('./schemas/account/LookupsSchema'));
-mongoose.model('Venue', require('./schemas/production/VenueSchema'));
-mongoose.model('RentalItem', require('./schemas/production/RentalItemSchema'));
-mongoose.model('MenuItem', require('./schemas/production/MenuItemSchema'));
-mongoose.model('Contract', require('./schemas/production/ContractSchema'));
-mongoose.model('Menu', require('./schemas/production/MenuSchema'));
-mongoose.model('MenuGroup', require('./schemas/production/MenuGroup'));
-mongoose.model('Customer', require('./schemas/customer/CustomerSchema'));
+mongoose.model('User', schemas.account.User);
+mongoose.model('Company', schemas.account.Company);
+mongoose.model('Lookups', schemas.common.Lookups);
+mongoose.model('Venue', schemas.events.Venue);
+mongoose.model('RentalItem', schemas.events.RentalItem);
+mongoose.model('MenuItem', schemas.production.MenuItem);
+mongoose.model('Contract', schemas.events.Contract);
+mongoose.model('Menu', schemas.production.Menu);
+mongoose.model('MenuGroup', schemas.production.MenuGroup);
+mongoose.model('Customer', schemas.customer.Customer);
 
 
 exports.seedDb = require('./seedDb');
