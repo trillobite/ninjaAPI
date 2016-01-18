@@ -38,19 +38,19 @@ exports.createModelItem = function (req, res, model) {
             res.status(400);
             return res.send({ reason: err.toString() });
         }
-        res.send(modelItem.toObject());
+        res.send({data: modelItem.toObject()});
     });
 };
 
 exports.updateModelItem = function (req, res, model) {
     delete req.body._id;
-    model.findByIdAndUpdate({ _id: req.params.id }, req.body, function (err, modelItem) {
+    model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);
             res.status(400);
             return res.send({ reason: err.toString() });
         }
-        res.send(modelItem.toObject());
+        res.send({data: modelItem.toObject()});
     });
 };
 
