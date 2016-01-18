@@ -1,6 +1,6 @@
 var express = require('express');
 var controller = require('../../crudCtrl');
-var MenuItem = require('mongoose').model('MenuItem');
+var Venue = require('mongoose').model('Venue');
 var tokenProtection = require('../../../../config/routeMiddleware');
 
 
@@ -10,19 +10,19 @@ var router = express.Router();
 
 router.use(tokenProtection);
 router.get('/', function(req, res){
-  controller.getModelItems(req, res, MenuItem);
+  controller.getModelItems(req, res, Venue);
 });
 router.get('/:id', function(req, res){
-  controller.getModelItemById(req, res, MenuItem);
+  controller.getModelItemById(req, res, Venue);
 });
 router.delete('/:id', function(req, res){
-  controller.deleteModelItem(req, res, MenuItem);
+  controller.deleteModelItem(req, res, Venue);
 });
 router.put('/:id', function(req, res){
-  controller.updateModelItem(req, res, MenuItem);
+  controller.updateModelItem(req, res, Venue);
 });
 router.post('/', function(req, res){
-  controller.createModelItem(req, res, MenuItem);
+  controller.createModelItem(req, res, Venue);
 });
 
 

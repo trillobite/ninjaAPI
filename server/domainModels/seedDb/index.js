@@ -4,3 +4,7 @@ exports.createDefaultMenuItems = require('./MenuItem');
 exports.createDefaultMenu = require('./Menu');
 exports.createDefaultMenuGroup = require('./MenuGroup');
 exports.createDefaultLookups = require('./Lookups');
+exports.createDefaultCustomers = require('./CustomerDefault');
+exports.createDefaultContracts = require('./ContractDefault');
+exports.createDefaultVenues = require('./VenueDefault');
+exports.createDefaultRentalItems = require('./RentalItemDefault');

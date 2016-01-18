@@ -1,4 +1,4 @@
-var userSchema = require ('../schemas/account/User');
+var userSchema = require ('../schemas/account/UserSchema');
 
 var encrypt = require('../../utilities/encryption');
 
