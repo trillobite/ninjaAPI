@@ -21,11 +21,29 @@ require('./server/config/errors')(app);
 //app.listen(config.port);
 app.set('port', config.port);
 //app.listen(app.get('port'));
-var server = require('http').Server(app);
+//var server = require('http').Server(app);
+var server = require('http');
+var secureServer = require('https');
 
-server.listen(app.get('port'));
+//https test
+const fs = require('fs');
+var https = require('https');
+var httpsPort = 3002;
+var credentials = {
+	key:fs.readFileSync('./key.pem'),
+	cert:fs.readFileSync('./cert.pem')
+};
+
+// var httpsServer = https.createServer(credentials, app);
+secureServer.createServer(credentials, app).listen(httpsPort);
+server.createServer(app).listen(config.port);
+//https test
+
+
+//server.listen(app.get('port'));
 
 
 
 
 console.log('Listening on port ' + config.port + "...");
+console.log('Listening for https on port ' + httpsPort + "...");
