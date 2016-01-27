@@ -8,6 +8,8 @@ function createDefaultMenuGroup(companyId, menu) {
     var newMenuGroup = new MenuGroup({
         
         meta: {company: companyId},
+        name: "Current Menu Items",
+        description: "this is our current menus group",
         title: "new menu group",
         subtitle: "new menu group subtitle",
         menus: [ {

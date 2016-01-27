@@ -7,7 +7,8 @@ function createDefaultMenu(companyId, items) {
     
     var newMenu = new Menu({
         meta: {company: companyId},
-        
+        name: "2016 Dinner Menu",
+        description: "This is our new menu with a descpription",
         title: "Dinner Menu",
         subtitle: "Our menu is prepared daily from fresh ingredients.",
         sections: [{
