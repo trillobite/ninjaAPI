@@ -6,5 +6,6 @@ router.use('/companies', require('./companies/companiesRouter'));
 router.use('/production', require('./production'));
 router.use('/common', require('./common/commonRouter'));
 router.use('/customers', require('./customers/customersRouter'));
+router.use('/events', require('./events'));
 
 module.exports = router;

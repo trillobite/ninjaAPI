@@ -8,3 +8,4 @@ exports.createDefaultCustomers = require('./CustomerDefault');
 exports.createDefaultContracts = require('./ContractDefault');
 exports.createDefaultVenues = require('./VenueDefault');
 exports.createDefaultRentalItems = require('./RentalItemDefault');
+exports.createSeedDB = require('./CreateSeedDB');
