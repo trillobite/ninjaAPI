@@ -13,8 +13,8 @@ function createDefaultCustomers(companyId) {
             
             var customer1 = {
                 meta:{company: companyId},
-                firstName: "Test Customer 1 fname",
-                lastName: "Test Customer 1 lname",
+                firstName: "John",
+                lastName: "Doe",
                 address: [{
                     addressType: "Test address type",
                     primary: true,   
@@ -34,8 +34,8 @@ function createDefaultCustomers(companyId) {
 
             var customer2 = {
                 meta:{company: companyId},
-                firstName: "Test Customer 2 fname",
-                lastName: "Test Customer 2 lname",
+                firstName: "Jane",
+                lastName: "Doe",
                 address: [{
                     addressType: "Test address type",
                     primary: true,   
