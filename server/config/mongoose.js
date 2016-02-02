@@ -1,8 +1,9 @@
 // here is where mongoose gets the models wired up
 var Q = require('q');
 var mongoose = require('mongoose');
-//var initialSeed = require('../domainModels/seedDb/initialSeed');
 var models = require('../domainModels');
+var initialSeed = require('../domainModels/seedDb/initialSeed');
+
 
 module.exports = function (config) {
 
@@ -13,7 +14,7 @@ module.exports = function (config) {
         console.log('ninjaAPI db opened');
     });
 
-    //initialSeed();
+   initialSeed();
 
 };
    

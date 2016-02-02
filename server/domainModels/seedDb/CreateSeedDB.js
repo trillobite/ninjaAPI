@@ -1,18 +1,22 @@
-// var seedDb = require('../domainModels/seedDb');
+var seedDb = require('./index');
 
-// module.exports = function(seedCompanyId) {
 
-//     seedDb.createDefaultLookups(seedCompanyId);
-//     seedDb.createDefaultUsers(companyId).then(                
-//         seedDb.createDefaultMenuItems(seedCompanyId)
-//         .then(function(items){
-//             seedDb.createDefaultMenu(seedCompanyId, items).then(function(menu){
-//                 seedDb.createDefaultMenuGroup(seedCompanyId, menu);
-//             })
-//         })
-//     )  
-//     seedDb.createDefaultCustomers(companyId);   
-//     seedDb.createDefaultContracts(companyId);   
-//     seedDb.createDefaultVenues(companyId);   
-//     seedDb.createDefaultRentalItems(companyId);
-// }
+
+var createSeedDb = function(CompanyId) {
+
+    seedDb.createDefaultLookups(CompanyId);
+    seedDb.createDefaultUsers(CompanyId)
+        .then(seedDb.createDefaultMenuItems(CompanyId)
+            .then(function(items){
+                seedDb.createDefaultMenu(CompanyId, items).then(function(menu){
+                    seedDb.createDefaultMenuGroup(CompanyId, menu);
+                })
+            })
+        )  
+    seedDb.createDefaultCustomers(CompanyId);   
+    seedDb.createDefaultContracts(CompanyId);   
+    seedDb.createDefaultVenues(CompanyId);   
+    seedDb.createDefaultRentalItems(CompanyId);
+};
+
+module.exports = createSeedDb;

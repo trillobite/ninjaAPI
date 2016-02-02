@@ -1,9 +1,10 @@
 var Contract = require('mongoose').model('Contract');
 var Q = require('q');
 
-module.exports = createDefaultContracts;
+
 
 function createDefaultContracts(companyId) {
+    console.log(companyId);
     var dfd = Q.defer();
     
     var items = [];
@@ -15,6 +16,8 @@ function createDefaultContracts(companyId) {
                 meta: {company: companyId},
                 title: "Test title",
                 description: "Test description",
+                date: new Date(2016, 21, 4),
+                price: 10000,
                 eventSteps: [{
                     time: 0800,
                     duration: 60,
@@ -33,6 +36,8 @@ function createDefaultContracts(companyId) {
                 meta: {company: companyId},
                 title: "Test title 2",
                 description: "Test description 2",
+                date: new Date(2016, 5, 7),
+                price: 20000,
                 eventSteps: [{
                     time: 0800,
                     duration: 60,
@@ -65,5 +70,6 @@ function createDefaultContracts(companyId) {
     });
     
     return dfd.promise;
-    
 }
+
+module.exports = createDefaultContracts;

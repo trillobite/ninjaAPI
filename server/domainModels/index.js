@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var schemas = require('./schemas');
 var serverSchemas = require('./serverSchemas');
 
-
 mongoose.model('User', serverSchemas.User);
 mongoose.model('Company', schemas.account.Company);
 mongoose.model('Lookups', schemas.common.Lookups);

@@ -1,7 +1,7 @@
 var RentalItem = require('mongoose').model('RentalItem');
 var Q = require('q');
 
-module.exports = createDefaultRentalItems;
+
 
 function createDefaultRentalItems(companyId) {
     var dfd = Q.defer();
@@ -14,6 +14,7 @@ function createDefaultRentalItems(companyId) {
             var rentalItem1 = {
                 meta: {company: companyId},
                 name: "Test rental item 1",
+                description: 'test description',
                 price: 100,
                 inHouse: true
             }
@@ -21,13 +22,9 @@ function createDefaultRentalItems(companyId) {
             var rentalItem2 = {
                 meta: {company: companyId},
                 name: "Test rental item 2",
+                description: 'test description',
                 price: 50,
-                inHouse: false,
-                contact: {
-                    name: "test contact",
-                    phone: 1234567890,
-                    email: "testemail@test.com"
-                }
+                inHouse: false
             }
 
             RentalItem.create(rentalItem1, rentalItem2, function (err, item1, item2) {
@@ -50,3 +47,5 @@ function createDefaultRentalItems(companyId) {
     return dfd.promise;
     
 }
+
+module.exports = createDefaultRentalItems;
