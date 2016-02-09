@@ -10,16 +10,29 @@ var router = express.Router();
 
 router.use(tokenProtection);
 router.get('/', function(req, res){
-  controller.getModelItems(req, res, Customer);
+    var population = {
+        path: 'contracts',
+        select: 'title date'
+    };
+    controller.getModelItemsAndPopulate(req, res, Customer, population);
 });
 router.get('/:id', function(req, res){
-  controller.getModelItemById(req, res, Customer);
+  //var population = ['contacts', 'title'];
+  var population = {
+      path: 'contracts',
+      select: 'title date'
+  };
+  controller.getModelItemByIdAndPoplulate(req, res, Customer, population);
 });
 router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Customer);
 });
 router.put('/:id', function(req, res){
-  controller.updateModelItem(req, res, Customer);
+    var population = {
+        path: 'contracts',
+        select: 'title date'
+    };
+    controller.updateModelItem(req, res, Customer, population);
 });
 router.post('/', function(req, res){
   controller.createModelItem(req, res, Customer);

@@ -28,6 +28,7 @@ function createDefaultUsers(companyId) {
             
             User.create(user1, user2, user3, user4, user5, function (err, user1, user2, user3, user4, user5){
                 if (err) {
+                    console.log(err);
                     deferred.reject(new Error(err));
                 }
                 
