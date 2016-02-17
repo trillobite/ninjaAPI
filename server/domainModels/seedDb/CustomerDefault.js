@@ -11,52 +11,55 @@ function createDefaultCustomers(companyId) {
         
         if (collection.length === 0) {
             
-            var customer1 = {
-                meta:{company: companyId},
-                firstName: "John",
-                lastName: "Doe",
-                address: [{
-                    addressType: "Test address type",
-                    primary: true,   
-                    address1: "test address line 1",   
-                    address2: "test address line 2",   
-                    city: "Test city 1",
-                    State: "Test State",
-                    Zip: 123456}],
-                emails: [{
-                    emailType: "test Email type",
-                    primary: true,
-                    email: "testemail123@test.com"}],
-                phoneNumbers: [{contactType: "Test contact type",
-                    primary: true,
-                    number: 1234567890}] 
-            }
-
             var customer2 = {
                 meta:{company: companyId},
-                firstName: "Jane",
-                lastName: "Doe",
-                address: [{
-                    addressType: "Test address type",
+                firstName: "John",
+                lastName: "Kennedy",
+                addresses: [{
+                    addressType: "work",
                     primary: true,   
-                    address1: "test address line 1",   
-                    address2: "test address line 2",   
-                    city: "Test city 1",
-                    State: "Test State",
-                    Zip: 123456}],
+                    address1: "1600 Pennsylvania Ave. NW",   
+                    address2: "",   
+                    city: "Washington",
+                    state: "DC",
+                    zip: "20500"}],
                 emails: [{
-                    emailType: "test Email type",
+                    emailType: "work",
                     primary: true,
-                    email: "testemail123@test.com"}],
-                phoneNumbers: [{
-                    contactType: "Test contact type",
+                    email: "president@whitehouse.gov"}],
+                phoneNumbers: [{contactType: "work",
                     primary: true,
-                    number: 1234567890}]
-            }
+                    number: "2024561111"}],
+                notes: "this is a note"
+            };
+
+            var customer1 = {
+                meta:{company: companyId},
+                firstName: "Ronald",
+                lastName: "Reagan",
+                addresses: [{
+                    addressType: "work",
+                    primary: true,   
+                    address1: "1600 Pennsylvania Ave. NW",   
+                    address2: "",   
+                    city: "Washington",
+                    state: "DC",
+                    zip: "20500"}],
+                emails: [{
+                    emailType: "work",
+                    primary: true,
+                    email: "president@whitehouse.gov"}],
+                phoneNumbers: [{contactType: "work",
+                    primary: true,
+                    number: "2024561111"}],
+                notes: "this is a note"
+            };
             
             Customer.create(customer1, customer2, function (err, item1, item2) {
                 if (err) {
                     dfd.reject(new Error(err));
+                    console.log(err);
+                    return;
                 }
                 items.push(item1);
                 items.push(item2);

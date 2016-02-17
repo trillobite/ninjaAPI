@@ -1,6 +1,7 @@
 var express = require('express');
 var controller = require('../../crudCtrl');
 var Contract = require('mongoose').model('Contract');
+var contractsCtrl = require('./contractsCtrl');
 var tokenProtection = require('../../../../config/routeMiddleware');
 
 
@@ -22,7 +23,7 @@ router.put('/:id', function(req, res){
   controller.updateModelItem(req, res, Contract);
 });
 router.post('/', function(req, res){
-  controller.createModelItem(req, res, Contract);
+  contractsCtrl.createContract(req, res, Contract);
 });
 
 

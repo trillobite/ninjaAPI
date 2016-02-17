@@ -37,6 +37,42 @@ exports.getModelItems = function (req, res, model) {
 }
 
 
+exports.getModelItemsAndPopulate = function (req, res, model, population) {
+    model.find({'meta.company':req.user.meta.company})
+    .populate(population)
+    .exec(function(err, collection){
+        if(err){
+            res.status(500);
+            return res.send({reason: err.toString()})
+        }
+        if (!collection.length) {
+            //res.status(404);
+            return res.send({noData: true, data: collection})
+        }
+        res.send({data:collection});
+    });
+
+};
+
+exports.getModelItemByIdAndPoplulate = function(req, res, model, population) {
+    
+    model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company })
+    //.populate('contracts', 'title')
+    .populate(population)
+    .exec(function(err, object){
+        
+        if(err){
+            res.status(500);
+            return res.send({reason: err.toString()})
+        }
+        if (!object) {
+            res.status(404);
+            return res.send({noData: true, data: object})
+        }
+        res.send({data:object});
+    });
+};
+
 exports.getModelItemById = function (req, res, model) {
     model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company }).exec(function(err, object){
         
@@ -69,7 +105,7 @@ exports.createModelItem = function (req, res, model) {
     });
 };
 
-exports.updateModelItem = function (req, res, model) {
+exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
     model.meta.dateLastMod = Date.now();
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
@@ -78,7 +114,17 @@ exports.updateModelItem = function (req, res, model) {
             res.status(400);
             return res.send({ reason: err.toString() });
         }
-        res.send({data: modelItem.toObject()});
+        
+        
+        if (population) {
+            modelItem.populate(population, function (err, returnItem) {
+                res.send({data: returnItem.toObject()});
+            });
+        } else {
+            res.send({data: modelItem.toObject()});
+        }
+        
+        
     });
 };
 
