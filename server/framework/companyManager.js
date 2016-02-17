@@ -15,11 +15,12 @@ function createNewCompany (signUpInfo) {
             console.log(err);
             deferred.reject(err);
         }
+
         // a new company needs an admin user and this happens below
         var newUser = dtoUserHelper(signUpInfo);
         newUser.company = newCompany._id;
         
-        createAccountAdmin(newUser).then(function(user){
+        createAccountAdmin(newUser).then(function(user){ 
             deferred.resolve(newCompany);
         }, function(err){
             deferred.reject(err);
