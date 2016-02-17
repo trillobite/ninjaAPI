@@ -1,16 +1,14 @@
 var Contract = require('mongoose').model('Contract');
-var Q = require('q');
-
-
 
 function createDefaultContracts(companyId) {
-    console.log(companyId);
-    var dfd = Q.defer();
     
     var items = [];
     Contract.find({}).exec(function (err, collection) {
+        if(err){
+            console.log(err.toString());
+        }
         
-        if (collection.length === 0) {
+        else if (collection.length === 0) {
             
             var contract1 = {
                 meta: {company: companyId},
@@ -54,13 +52,13 @@ function createDefaultContracts(companyId) {
             
             Contract.create(contract1, contract2, function (err, item1, item2) {
                 if (err) {
-                    dfd.reject(new Error(err));
+                    console.log('Contract default data failed: ' + err.toString());
                 }
-                items.push(item1);
-                items.push(item2);
-                console.log('2 succesfully created contracts.....');
-                dfd.resolve(items);
-                
+                else{
+                    items.push(item1);
+                    items.push(item2);
+                    console.log('2 succesfully created contracts.....');
+                }
             });
             
             
@@ -68,8 +66,6 @@ function createDefaultContracts(companyId) {
         }
         
     });
-    
-    return dfd.promise;
 }
 
 module.exports = createDefaultContracts;
