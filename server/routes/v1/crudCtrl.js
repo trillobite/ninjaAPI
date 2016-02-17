@@ -49,7 +49,7 @@ exports.getModelItemByIdAndPoplulate = function(req, res, model, population) {
     });
 };
 
-exports.getModelItemById = function (req, res, model) {
+exports.getModelItemById = function (req, res, model, population) {
     model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company }).exec(function(err, object){
         
         if(err){
@@ -60,7 +60,14 @@ exports.getModelItemById = function (req, res, model) {
             res.status(404);
             return res.send({noData: true, data: object})
         }
-        res.send({data:object});
+        if (population) {
+            object.populate(population, function(err, object) {
+                return res.send({data:object});
+            });
+        } else {
+            return res.send({data:object});
+        }
+        
     });
     
 };

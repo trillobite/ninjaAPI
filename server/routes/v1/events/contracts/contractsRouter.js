@@ -14,7 +14,11 @@ router.get('/', function(req, res){
   controller.getModelItems(req, res, Contract);
 });
 router.get('/:id', function(req, res){
-  controller.getModelItemById(req, res, Contract);
+  var population = {
+      path: 'customer'
+  };
+  
+  controller.getModelItemById(req, res, Contract, population);
 });
 router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Contract);
