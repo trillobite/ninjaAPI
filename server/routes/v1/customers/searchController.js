@@ -6,7 +6,7 @@ exports.searchCustomers = function (req, res, model) {
         $and: [
             {$or:[{'firstName': new RegExp(req.query.Name, 'i')}, {'lastName': new RegExp(req.query.Name, 'i')}]},
             {'meta.company':req.user.meta.company}
-        ]}).select('firstName lastName').exec(function(err, collection){
+        ]}).select('firstName lastName fullName').exec(function(err, collection){
         if(err){
             res.status(500);
             return res.send({reason: err.toString()})

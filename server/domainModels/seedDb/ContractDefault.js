@@ -1,4 +1,5 @@
 var Contract = require('mongoose').model('Contract');
+var Customer = require('mongoose').model('Customer');
 
 var Q = require('q');
 
@@ -50,9 +51,19 @@ function createDefaultContracts(companyId, customers) {
                     dfd.reject(new Error(err));
                 }
                 items.push(item1);
-                //items.push(item2);
+                
                 console.log('2 succesfully created contracts.....');
-                dfd.resolve(items);
+                Customer.findByIdAndUpdate(item1.customer, 
+                    {$push: {contracts: item1._id}},
+                    {safe: true, upsert: true}, function(err, customer){
+                    if(err){
+                        dfd.reject(new Error(err));
+                    }
+                    dfd.resolve(items);
+                });
+                
+                
+                
                 
 
             });
