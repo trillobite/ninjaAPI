@@ -1,5 +1,7 @@
 var Contract = require('mongoose').model('Contract');
 
+var Q = require('q');
+
 
 function createDefaultContracts(companyId, customers) {
     console.log(companyId);

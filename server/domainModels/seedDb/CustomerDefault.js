@@ -1,9 +1,12 @@
 var Customer = require('mongoose').model('Customer');
 
+var Q = require('q');
+
 module.exports = createDefaultCustomers;
 
 function createDefaultCustomers(companyId) {
     
+    var deferred = Q.defer();
     var items = [];
     Customer.find({}).exec(function (err, collection) {
         if(err){
@@ -59,11 +62,13 @@ function createDefaultCustomers(companyId) {
             Customer.create(customer1, customer2, function (err, item1, item2) {
                 if (err) {
                     console.log('Customer default data failed: ' + err.toString());
+                    deferred.reject(err);
                 }
                 else{
                     items.push(item1);
                     items.push(item2);
                     console.log('2 succesfully created customers.....');
+                    deferred.resolve(items);
                 }
             });
             
@@ -73,4 +78,5 @@ function createDefaultCustomers(companyId) {
         
     });
     
+    return deferred.promise;
 }
