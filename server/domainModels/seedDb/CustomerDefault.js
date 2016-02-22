@@ -64,6 +64,8 @@ function createDefaultCustomers(companyId) {
                 items.push(item1);
                 items.push(item2);
                 console.log('2 succesfully created customers.....');
+                // console.log('customers');
+                // console.log(items);
                 dfd.resolve(items);
                 
             });

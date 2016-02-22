@@ -28,6 +28,8 @@ function mFind(company, select, res, model){
 }
 
 exports.getModelItems = function (req, res, model) {
+    //var select = req.query.sel || model.meta.defaultsel;
+    
     if(req.query.sel === 'qlist'){
         mFind({'meta.company':req.user.meta.company}, model.meta.defaultsel, res, model);
     }
