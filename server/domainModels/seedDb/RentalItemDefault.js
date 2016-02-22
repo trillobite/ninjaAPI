@@ -1,15 +1,13 @@
 var RentalItem = require('mongoose').model('RentalItem');
-var Q = require('q');
-
-
 
 function createDefaultRentalItems(companyId) {
-    var dfd = Q.defer();
     
     var items = [];
     RentalItem.find({}).exec(function (err, collection) {
-        
-        if (collection.length === 0) {
+        if(err){
+            console.log(err.toString());
+        }
+        else if (collection.length === 0) {
             
             var rentalItem1 = {
                 meta: {company: companyId},
@@ -29,12 +27,13 @@ function createDefaultRentalItems(companyId) {
 
             RentalItem.create(rentalItem1, rentalItem2, function (err, item1, item2) {
                 if (err) {
-                    dfd.reject(new Error(err));
+                    console.log('RentalItem default data failed: ' + err.toString()); 
                 }
-                items.push(item1);
-                items.push(item2);
-                console.log('2 succesfully created rental items.....');
-                dfd.resolve(items);
+                else{
+                    items.push(item1);
+                    items.push(item2);
+                    console.log('2 succesfully created rental items.....');
+                }
                 
             });
             
@@ -43,8 +42,6 @@ function createDefaultRentalItems(companyId) {
         }
         
     });
-    
-    return dfd.promise;
     
 }
 

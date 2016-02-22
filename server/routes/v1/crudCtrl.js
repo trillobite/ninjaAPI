@@ -13,8 +13,17 @@
 
 // };
 
-function mFind(company, select, res, model){
-    model.find(company).select(select).exec(function(err, collection){
+exports.getModelItems = function (req, res, model) {
+
+    var select = req.query.select;
+    if(req.query.where) {
+        req.query.where["meta.company"] = req.user.meta.company;
+    }
+    var where = req.query.where || {'meta.company':req.user.meta.company};
+    
+    //REMOVE THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    model.find(where).select(select).exec(function(err, collection){
         if(err){
             res.status(500);
             return res.send({reason: err.toString()})
@@ -24,19 +33,22 @@ function mFind(company, select, res, model){
             return res.send({noData: true, data: collection})
         }
         res.send({data:collection});
+
     });
 }
 
-exports.getModelItems = function (req, res, model) {
-    //var select = req.query.sel || model.meta.defaultsel;
+// exports.getModelItems = function (req, res, model) {
+//     //var select = req.query.sel || model.meta.defaultsel;
     
-    if(req.query.sel === 'qlist'){
-        mFind({'meta.company':req.user.meta.company}, model.meta.defaultsel, res, model);
-    }
-    else {
-        mFind({'meta.company':req.user.meta.company}, req.query.sel, res, model);
-    }
-}
+//     if(req.query.sel === 'qlist'){
+//         mFind({'meta.company':req.user.meta.company}, model.meta.defaultsel, res, model);
+//     }
+//     else {
+//         mFind({'meta.company':req.user.meta.company}, req.query.sel, res, model);
+//     }
+
+
+// }
 
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
