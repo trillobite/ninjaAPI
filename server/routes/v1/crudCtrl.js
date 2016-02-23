@@ -128,7 +128,7 @@ exports.createModelItem = function (req, res, model) {
 
 exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
-    model.meta.dateLastMod = Date.now();
+    req.body.meta.dateLastMod = Date.now();
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);
