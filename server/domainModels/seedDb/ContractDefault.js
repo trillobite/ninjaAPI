@@ -40,6 +40,7 @@ function createDefaultContracts(companyId, customers) {
                     rep: "susan",
                     description: "test Description"
                 }],
+                menuItems: [{name: "made up item", description: "made up description", price: 20.95, quantity: 2}],
                 status: ["In communication"],
                 notes: "test notes"
             }
