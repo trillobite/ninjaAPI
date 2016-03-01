@@ -12,18 +12,25 @@
 //     });
 
 // };
+ 
+
 
 exports.getModelItems = function (req, res, model) {
-
-    var select = req.query.select;
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.meta.company;
     }
     var where = req.query.where || {'meta.company':req.user.meta.company};
-    
-    //REMOVE THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    var query = (model.find(where));
+    if(req.query.select){
+        query.select(req.query.select);
+    }
+    if(req.query.page){
+        query.limit(req.query.page.size);
+        query.skip(req.query.page.size * (req.query.page.number - 1));
+        query.sort(req.query.sort);
+    }
 
-    model.find(where).select(select).exec(function(err, collection){
+    query.exec(function(err, collection){
         if(err){
             res.status(500);
             return res.send({reason: err.toString()})
@@ -34,7 +41,7 @@ exports.getModelItems = function (req, res, model) {
         }
         res.send({data:collection});
     })
-}
+};
 
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
