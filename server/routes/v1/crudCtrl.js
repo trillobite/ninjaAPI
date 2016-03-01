@@ -40,8 +40,27 @@ exports.getModelItems = function (req, res, model) {
             return res.send({noData: true, data: collection})
         }
         res.send({data:collection});
+<<<<<<< HEAD
     })
 };
+=======
+
+    });
+}
+>>>>>>> 0aa3d12e56ce1aed8cfe9f3eb76aaed84c7b4590
+
+// exports.getModelItems = function (req, res, model) {
+//     //var select = req.query.sel || model.meta.defaultsel;
+    
+//     if(req.query.sel === 'qlist'){
+//         mFind({'meta.company':req.user.meta.company}, model.meta.defaultsel, res, model);
+//     }
+//     else {
+//         mFind({'meta.company':req.user.meta.company}, req.query.sel, res, model);
+//     }
+
+
+// }
 
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
@@ -80,7 +99,7 @@ exports.getModelItemByIdAndPoplulate = function(req, res, model, population) {
     });
 };
 
-exports.getModelItemById = function (req, res, model) {
+exports.getModelItemById = function (req, res, model, population) {
     model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company }).exec(function(err, object){
         
         if(err){
@@ -91,7 +110,14 @@ exports.getModelItemById = function (req, res, model) {
             res.status(404);
             return res.send({noData: true, data: object})
         }
-        res.send({data:object});
+        if (population) {
+            object.populate(population, function(err, object) {
+                return res.send({data:object});
+            });
+        } else {
+            return res.send({data:object});
+        }
+        
     });
     
 };
@@ -114,7 +140,7 @@ exports.createModelItem = function (req, res, model) {
 
 exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
-    model.meta.dateLastMod = Date.now();
+    req.body.meta.dateLastMod = Date.now();
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);

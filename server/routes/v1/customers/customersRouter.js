@@ -12,7 +12,7 @@ router.use(tokenProtection);
 router.get('/', function(req, res){
     var population = {
         path: 'contracts',
-        select: 'title date'
+        select: 'title eventDate'
     };
     controller.getModelItemsAndPopulate(req, res, Customer, population);
 });
@@ -20,7 +20,7 @@ router.get('/:id', function(req, res){
   //var population = ['contacts', 'title'];
   var population = {
       path: 'contracts',
-      select: 'title date'
+      select: 'title eventDate'
   };
   controller.getModelItemByIdAndPoplulate(req, res, Customer, population);
 });
@@ -30,7 +30,7 @@ router.delete('/:id', function(req, res){
 router.put('/:id', function(req, res){
     var population = {
         path: 'contracts',
-        select: 'title date'
+        select: 'title eventDate'
     };
     controller.updateModelItem(req, res, Customer, population);
 });

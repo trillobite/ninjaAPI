@@ -1,7 +1,16 @@
 var Contract = require('mongoose').model('Contract');
+var Customer = require('mongoose').model('Customer');
 
-function createDefaultContracts(companyId) {
-    
+var Q = require('q');
+
+
+function createDefaultContracts(companyId, customers) {
+    console.log(companyId);
+    var dfd = Q.defer();
+    console.log(customers);
+    console.log(customers[0]._id);
+    console.log('companyid' + companyId);
+
     var items = [];
     Contract.find({}).exec(function (err, collection) {
         if(err){
@@ -12,53 +21,52 @@ function createDefaultContracts(companyId) {
             
             var contract1 = {
                 meta: {company: companyId},
-                title: "Test title",
-                description: "Test description",
-                date: new Date(2016, 21, 4),
+                customer: customers[0]._id,
+                eventName: "Smith Rehearsal Dinner",
+                //description: "Test description",
+                natureOfEvent: "Plated full service dinner",
+                initialContactDate: new Date(2016, 11, 25),
+                
+                eventDate: new Date(2016, 11, 25),
+                startTime: new Date('2016-12-26T03:00:00Z'),
                 price: 10000,
                 eventSteps: [{
                     time: 0800,
                     duration: 60,
-                    description: "Test event description"}],
+                    description: "Guests arrive"}],
                 commLog: [{
                     date: "1/12/2016",
                     commType: "email",
                     rep: "susan",
                     description: "test Description"
                 }],
+                menuItems: [{name: "made up item", description: "made up description", price: 20.95, quantity: 2}],
                 status: ["In communication"],
                 notes: "test notes"
             }
-
-            var contract2 = {
-                meta: {company: companyId},
-                title: "Test title 2",
-                description: "Test description 2",
-                date: new Date(2016, 5, 7),
-                price: 20000,
-                eventSteps: [{
-                    time: 0800,
-                    duration: 60,
-                    description: "Test event description 2"}],
-                commLog: [{
-                    date: "1/12/2016",
-                    commType: "email",
-                    rep: "susan",
-                    description: "test Description"
-                }],
-                status: ["Scheduled"],
-                notes: "test notes 2"
-            }
             
-            Contract.create(contract1, contract2, function (err, item1, item2) {
+            Contract.create(contract1, function (err, item1, item2) {
                 if (err) {
-                    console.log('Contract default data failed: ' + err.toString());
+
+                    console.log(err);
+                    dfd.reject(new Error(err));
                 }
-                else{
-                    items.push(item1);
-                    items.push(item2);
-                    console.log('2 succesfully created contracts.....');
-                }
+                items.push(item1);
+                
+                console.log('2 succesfully created contracts.....');
+                Customer.findByIdAndUpdate(item1.customer, 
+                    {$push: {contracts: item1._id}},
+                    {safe: true, upsert: true}, function(err, customer){
+                    if(err){
+                        dfd.reject(new Error(err));
+                    }
+                    dfd.resolve(items);
+                });
+                
+                
+                
+                
+
             });
             
             

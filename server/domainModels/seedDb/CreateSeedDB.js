@@ -13,8 +13,11 @@ var createSeedDb = function(CompanyId) {
                 })
             })
         )  
-    seedDb.createDefaultCustomers(CompanyId);   
-    seedDb.createDefaultContracts(CompanyId);   
+    seedDb.createDefaultCustomers(CompanyId)
+        .then(function(customers){
+            seedDb.createDefaultContracts(CompanyId, customers);
+        });   
+       
     seedDb.createDefaultVenues(CompanyId);   
     seedDb.createDefaultRentalItems(CompanyId);
 };
