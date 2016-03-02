@@ -10,6 +10,7 @@ var router = express.Router();
 
 router.use(tokenProtection);
 router.get('/', function(req, res){
+    console.log(req.query);
     searchController.searchCustomers(req, res, Customer);
 });
 

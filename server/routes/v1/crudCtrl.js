@@ -14,7 +14,9 @@
 // };
 
 exports.getModelItems = function (req, res, model) {
-
+    
+    
+    
     var select = req.query.select;
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.meta.company;
@@ -52,9 +54,20 @@ exports.getModelItems = function (req, res, model) {
 
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
-    model.find({'meta.company':req.user.meta.company})
-    .populate(population)
-    .exec(function(err, collection){
+    
+    
+    
+    var query = model.find({'meta.company':req.user.meta.company});
+    
+    if (req.query.populate) {
+        // foreach key populate
+            //query.populate
+    }
+     
+    
+    
+    query.populate(population)
+    query.exec(function(err, collection){
         if(err){
             res.status(500);
             return res.send({reason: err.toString()})

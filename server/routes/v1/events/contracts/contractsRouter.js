@@ -14,6 +14,10 @@ router.get('/', function(req, res){
   controller.getModelItems(req, res, Contract);
 });
 router.get('/:id', function(req, res){
+  // build queryOptions object
+  // we can optionally append to queryOptions
+  // pass queryOptions to crudContoller
+  
   var population = {
       path: 'customer'
   };
@@ -24,7 +28,11 @@ router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Contract);
 });
 router.put('/:id', function(req, res){
-  controller.updateModelItem(req, res, Contract);
+    var population = {
+      path: 'customer'
+  };
+  controller.updateModelItem(req, res, Contract, population);
+  
 });
 router.post('/', function(req, res){
   contractsCtrl.createContract(req, res, Contract);
