@@ -8,45 +8,41 @@
 //http://localhost:3001/api/v1/events/venues?page[size]=2&page[number]=4&sort[capacity]=1&select=price+capacity+name
 
 exports.getModelItems = function (req, res, model) {
-    // var test1 = {
-    //     test1prop: "test1value",
-    //     test1prop2: "test1value2",
-    //     test1prop3: "test1value3"
-    // };
-    // var test2 = {
-    //     test2prop: "test2value"
-    // };
-
-    // for (var key in test1) {
-    //     if (test1.hasOwnProperty(key)) {
-    //         console.log(test1[key] + '\n');
-    //         test2[key] = test1[key];
-    //         //test2.key = test1.key;
-    //     }
-    // }
-
+    //checking query for where statements
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.meta.company;
     }
+    //use either the where statement from the query, or an empty one with just the company selector
     var where = req.query.where || {'meta.company':req.user.meta.company};
+    //check for 'like' statements in query string, add to the where statement if they exist
+    if(req.query.like){
+        for (var key in req.query.like) {
+            if (req.query.like.hasOwnProperty(key)) {
+                where[key] = new RegExp(req.query.like[key], 'i');
+                console.log(where[key]);
+            }
+        }
+    }
+    //create initial query
     var query = (model.find(where));
+    //check for 'select' statements in the query string, add to mongoose query if they exist
     if(req.query.select){
         query.select(req.query.select);
     }
+    //check for paging request in the query string
     if(req.query.page){
         query.limit(req.query.page.size);
         query.skip(req.query.page.size * (req.query.page.number - 1));
         query.sort(req.query.sort);
     }
-    if(req.query.like){
-        for (var key in req.query.like) {
-            if (req.query.like.hasOwnProperty(key)) {
-                where[key.toString()] = new RegExp(req.query.like[key], 'i');
-            }
+    //check for population request in the query string
+    if(req.query.populate){
+        console.log(req.query.populate);
+        for(var field in req.query.populate) {
+            query.populate(req.query.populate[field]);
+            console.log(req.query.populate[field]);
         }
     }
-    console.log(where);
-
     query.exec(function(err, collection){
         if(err){
             res.status(500);
@@ -131,7 +127,8 @@ exports.createModelItem = function (req, res, model) {
 
 exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
-    model.meta.dateLastMod = Date.now();
+    console.log(model);
+    model['meta.dateLastMod'] = Date.now();
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);

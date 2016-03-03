@@ -5,7 +5,6 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 // instantiate express
 var app = express();
 
-
 // bring in our config object and getting the correct object based on where we are deployed
 var config = require('./server/config/config')[env];
 //  configure express based on where we are deployed...in here is where the stylus files get processed
