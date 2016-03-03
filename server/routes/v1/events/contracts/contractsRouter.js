@@ -22,7 +22,7 @@ router.get('/:id', function(req, res){
       path: 'customer'
   };
   
-  controller.getModelItemById(req, res, Contract, population);
+  controller.getModelItemByIdAndPoplulate(req, res, Contract, population);
 });
 router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Contract);
