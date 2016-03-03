@@ -7,8 +7,14 @@
 //?select=<var1>+<var2>+<var3> select only properties var1, var2, and var3
 //http://localhost:3001/api/v1/events/venues?page[size]=2&page[number]=4&sort[capacity]=1&select=price+capacity+name
 
+
 exports.getModelItems = function (req, res, model) {
+<<<<<<< HEAD
     //checking query for where statements
+=======
+
+
+>>>>>>> 8024c28d866e39523edeed97009dbada8e7bab3d
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.meta.company;
     }
@@ -53,14 +59,42 @@ exports.getModelItems = function (req, res, model) {
             return res.send({noData: true, data: collection})
         }
         res.send({data:collection});
-    })
+
+
+    });
 };
 
 
+// exports.getModelItems = function (req, res, model) {
+//     //var select = req.query.sel || model.meta.defaultsel;
+    
+//     if(req.query.sel === 'qlist'){
+//         mFind({'meta.company':req.user.meta.company}, model.meta.defaultsel, res, model);
+//     }
+//     else {
+//         mFind({'meta.company':req.user.meta.company}, req.query.sel, res, model);
+//     }
+
+
+// }
+
+
+
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
-    model.find({'meta.company':req.user.meta.company})
-    .populate(population)
-    .exec(function(err, collection){
+    
+    
+    
+    var query = model.find({'meta.company':req.user.meta.company});
+    
+    if (req.query.populate) {
+        // foreach key populate
+            //query.populate
+    }
+     
+    
+    
+    query.populate(population)
+    query.exec(function(err, collection){
         if(err){
             res.status(500);
             return res.send({reason: err.toString()})
@@ -127,8 +161,12 @@ exports.createModelItem = function (req, res, model) {
 
 exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
+<<<<<<< HEAD
     console.log(model);
     model['meta.dateLastMod'] = Date.now();
+=======
+    req.body.meta.dateLastMod = Date.now();
+>>>>>>> 8024c28d866e39523edeed97009dbada8e7bab3d
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);
