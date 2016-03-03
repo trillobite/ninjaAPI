@@ -1,22 +1,15 @@
-// exports.getModelItems = function (req, res, model) {
-//     model.find({'meta.company':req.user.meta.company}).exec(function(err, collection){z
-//         if(err){
-//             res.status(500);
-//             return res.send({reason: err.toString()})
-//         }
-//         if (!collection.length) {
-//             //res.status(404);
-//             return res.send({noData: true, data: collection})
-//         }
-//         res.send({data:collection});
-//     });
 
-// };
- 
-
+//example query string
+// tags <> indicate variables (e.g. <pagesize> should be replaced with an actual number)
+//?page[size]=<pageSize>    size of page
+//?page[number]=<pageNumber>   page number
+//?sort[<searchCriteria>]=<sort order>   sort order should be either '1' for ascending or '2' for descending
+//?select=<var1>+<var2>+<var3> select only properties var1, var2, and var3
+//http://localhost:3001/api/v1/events/venues?page[size]=2&page[number]=4&sort[capacity]=1&select=price+capacity+name
 
 
 exports.getModelItems = function (req, res, model) {
+
 
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.meta.company;
@@ -31,6 +24,14 @@ exports.getModelItems = function (req, res, model) {
         query.skip(req.query.page.size * (req.query.page.number - 1));
         query.sort(req.query.sort);
     }
+    if(req.query.like){
+        for (var key in req.query.like) {
+            if (req.query.like.hasOwnProperty(key)) {
+                where[key.toString()] = new RegExp(req.query.like[key], 'i');
+            }
+        }
+    }
+    console.log(where);
 
     query.exec(function(err, collection){
         if(err){
@@ -42,6 +43,7 @@ exports.getModelItems = function (req, res, model) {
             return res.send({noData: true, data: collection})
         }
         res.send({data:collection});
+
 
     });
 };
@@ -59,6 +61,7 @@ exports.getModelItems = function (req, res, model) {
 
 
 // }
+
 
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
@@ -108,7 +111,7 @@ exports.getModelItemByIdAndPoplulate = function(req, res, model, population) {
     });
 };
 
-exports.getModelItemById = function (req, res, model, population) {
+exports.getModelItemById = function (req, res, model) {
     model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company }).exec(function(err, object){
         
         if(err){
@@ -119,14 +122,7 @@ exports.getModelItemById = function (req, res, model, population) {
             res.status(404);
             return res.send({noData: true, data: object})
         }
-        if (population) {
-            object.populate(population, function(err, object) {
-                return res.send({data:object});
-            });
-        } else {
-            return res.send({data:object});
-        }
-        
+        res.send({data:object});
     });
     
 };
@@ -149,7 +145,7 @@ exports.createModelItem = function (req, res, model) {
 
 exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
-    req.body.meta.dateLastMod = Date.now();
+    model.meta.dateLastMod = Date.now();
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);
