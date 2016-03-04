@@ -9,12 +9,7 @@
 
 
 exports.getModelItems = function (req, res, model) {
-<<<<<<< HEAD
-    //checking query for where statements
-=======
 
-
->>>>>>> 8024c28d866e39523edeed97009dbada8e7bab3d
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.meta.company;
     }
@@ -161,12 +156,8 @@ exports.createModelItem = function (req, res, model) {
 
 exports.updateModelItem = function (req, res, model, population) {
     delete req.body._id;
-<<<<<<< HEAD
-    console.log(model);
-    model['meta.dateLastMod'] = Date.now();
-=======
+
     req.body.meta.dateLastMod = Date.now();
->>>>>>> 8024c28d866e39523edeed97009dbada8e7bab3d
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);
