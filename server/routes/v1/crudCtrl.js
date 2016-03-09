@@ -38,10 +38,9 @@ exports.getModelItems = function (req, res, model) {
     }
     //check for population request in the query string
     if(req.query.populate){
-        console.log(req.query.populate);
-        for(var field in req.query.populate) {
-            query.populate(req.query.populate[field]);
-            console.log(req.query.populate[field]);
+        var populateQuery = {};
+        for(var key in req.query.populate) {
+            query.populate(key, req.query.populate[key].select);
         }
     }
     query.exec(function(err, collection){
@@ -58,22 +57,6 @@ exports.getModelItems = function (req, res, model) {
 
     });
 };
-
-
-// exports.getModelItems = function (req, res, model) {
-//     //var select = req.query.sel || model.meta.defaultsel;
-    
-//     if(req.query.sel === 'qlist'){
-//         mFind({'meta.company':req.user.meta.company}, model.meta.defaultsel, res, model);
-//     }
-//     else {
-//         mFind({'meta.company':req.user.meta.company}, req.query.sel, res, model);
-//     }
-
-
-// }
-
-
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
     
@@ -155,9 +138,10 @@ exports.createModelItem = function (req, res, model) {
 };
 
 exports.updateModelItem = function (req, res, model, population) {
-    delete req.body._id;
+    //delete req.body._id;
+    req.body["meta.dateLastMod"] = Date.now();
+    console.log(req.body);
 
-    req.body.meta.dateLastMod = Date.now();
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
             console.log(err);

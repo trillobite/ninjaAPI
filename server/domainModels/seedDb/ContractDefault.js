@@ -5,11 +5,7 @@ var Q = require('q');
 
 
 function createDefaultContracts(companyId, customers) {
-    console.log(companyId);
     var dfd = Q.defer();
-    console.log(customers);
-    console.log(customers[0]._id);
-    console.log('companyid' + companyId);
 
     var items = [];
     Contract.find({}).exec(function (err, collection) {
@@ -21,7 +17,8 @@ function createDefaultContracts(companyId, customers) {
             
             var contract1 = {
                 meta: {company: companyId},
-                customer: customers[0]._id,
+                customer: '56ddc91507a6a07c032e6025',
+                //customers[0]._id,
                 eventName: "Smith Rehearsal Dinner",
                 //description: "Test description",
                 natureOfEvent: "Plated full service dinner",
@@ -40,7 +37,7 @@ function createDefaultContracts(companyId, customers) {
                     rep: "susan",
                     description: "test Description"
                 }],
-                menuItems: [{name: "made up item", description: "made up description", price: 20.95, quantity: 2}],
+                menuItems: [],
                 status: ["In communication"],
                 notes: "test notes"
             }
