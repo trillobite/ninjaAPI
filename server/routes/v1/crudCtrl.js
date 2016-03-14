@@ -8,6 +8,9 @@
 //http://localhost:3001/api/v1/events/venues?page[size]=2&page[number]=4&sort[capacity]=1&select=price+capacity+name
 
 
+//example query string
+//http://localhost:3001/api/v1/events/contracts?moreThan[price]=3000&like[notes]=this&select=name+description+menuItems+price&populate[menuItems][select]=name+descrpiton
+
 exports.getModelItems = function (req, res, model) {
 
     if(req.query.where) {
@@ -30,11 +33,14 @@ exports.getModelItems = function (req, res, model) {
     if(req.query.select){
         query.select(req.query.select);
     }
-    if(req.query.greater){
-        for(var key in req.query.greater){
-            console.log(key);
-            console.log(req.query.greater["key"]);
-            query.where(key).gt(req.query.greater["key"]);
+    if(req.query.moreThan){
+        for(var key in req.query.moreThan){
+            query.where(key).gt(req.query.moreThan[key]);
+        }
+    }
+    if(req.query.lessThan){
+        for(var key in req.query.lessThan){
+            query.where(key).gt(req.query.lessThan[key]);
         }
     }
     //check for paging request in the query string
