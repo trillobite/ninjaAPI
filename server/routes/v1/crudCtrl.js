@@ -30,6 +30,13 @@ exports.getModelItems = function (req, res, model) {
     if(req.query.select){
         query.select(req.query.select);
     }
+    if(req.query.greater){
+        for(var key in req.query.greater){
+            console.log(key);
+            console.log(req.query.greater["key"]);
+            query.where(key).gt(req.query.greater["key"]);
+        }
+    }
     //check for paging request in the query string
     if(req.query.page){
         query.limit(req.query.page.size);
