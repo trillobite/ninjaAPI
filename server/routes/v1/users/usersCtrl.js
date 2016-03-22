@@ -11,6 +11,12 @@ exports.getUsers = function(req, res){
 
 };
 
+exports.getUserById = function(req, res){
+    User.findOne({_id: req.params.id, 'meta.company':req.user.meta.company}).select('firstName lastName username company roles').exec(function(err, item){
+        utilities.getItemCallback(err, item, res);
+    })
+};
+
 exports.userExists = function(req,res){
     User.findOne({username: req.params.username}).exec(function(err,item){
         if(err){
