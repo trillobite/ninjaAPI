@@ -1,7 +1,6 @@
 var express = require('express');
 var controller = require('../../crudCtrl');
 var Contract = require('mongoose').model('Contract');
-var contractsCtrl = require('./contractsCtrl');
 var tokenProtection = require('../../../../config/routeMiddleware');
 
 
@@ -14,28 +13,16 @@ router.get('/', function(req, res){
   controller.getModelItems(req, res, Contract);
 });
 router.get('/:id', function(req, res){
-  // build queryOptions object
-  // we can optionally append to queryOptions
-  // pass queryOptions to crudContoller
-  
-  var population = {
-      path: 'customer'
-  };
-  
-  controller.getModelItemByIdAndPoplulate(req, res, Contract, population);
+  controller.getModelItemById(req, res, Contract);
 });
 router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Contract);
 });
 router.put('/:id', function(req, res){
-    var population = {
-      path: 'customer'
-  };
-  controller.updateModelItem(req, res, Contract, population);
-  
+  controller.updateModelItem(req, res, Contract);
 });
 router.post('/', function(req, res){
-  contractsCtrl.createContract(req, res, Contract);
+  controller.createModelItem(req, res, Contract);
 });
 
 

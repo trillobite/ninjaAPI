@@ -1,4 +1,3 @@
-
 //example query string
 // tags <> indicate variables (e.g. <pagesize> should be replaced with an actual number)
 //?page[size]=<pageSize>    size of page
@@ -23,7 +22,6 @@ exports.getModelItems = function (req, res, model) {
         for (var key in req.query.like) {
             if (req.query.like.hasOwnProperty(key)) {
                 where[key] = new RegExp(req.query.like[key], 'i');
-                console.log(where[key]);
             }
         }
     }
@@ -51,7 +49,6 @@ exports.getModelItems = function (req, res, model) {
     }
     //check for population request in the query string
     if(req.query.populate){
-        var populateQuery = {};
         for(var key in req.query.populate) {
             query.populate(key, req.query.populate[key].select);
         }
@@ -99,28 +96,14 @@ exports.getModelItemsAndPopulate = function (req, res, model, population) {
 
 };
 
-exports.getModelItemByIdAndPoplulate = function(req, res, model, population) {
-    
-    model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company })
-    //.populate('contracts', 'title')
-    .populate(population)
-    .exec(function(err, object){
-        
-        if(err){
-            res.status(500);
-            return res.send({reason: err.toString()})
-        }
-        if (!object) {
-            res.status(404);
-            return res.send({noData: true, data: object})
-        }
-        res.send({data:object});
-    });
-};
-
 exports.getModelItemById = function (req, res, model) {
-    model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company }).exec(function(err, object){
-        
+    var query = model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company });
+    if(req.query.populate){
+        for(var key in req.query.populate) {
+            query.populate(key, req.query.populate[key].select);
+        }
+    }
+    query.exec(function(err, object){
         if(err){
             res.status(500);
             return res.send({reason: err.toString()})
@@ -153,8 +136,6 @@ exports.createModelItem = function (req, res, model) {
 exports.updateModelItem = function (req, res, model, population) {
     //delete req.body._id;
     //req.body["meta.dateLastMod"] = Date.now();
-    req.body.meta.dateLastMod = Date.now();
-    console.log(req.body);
 
     model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
         if (err) {
@@ -179,7 +160,6 @@ exports.updateModelItem = function (req, res, model, population) {
 exports.deleteModelItem = function (req, res, model) {
     model.remove({ _id: req.params.id }, function (err) {
         if (err) {
-            console.log("inside deleted");
             res.status(400);
             return res.send({ reason: err.toString() });
         }
