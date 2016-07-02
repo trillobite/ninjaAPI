@@ -17,8 +17,8 @@ function createDefaultContracts(companyId, customers) {
             
             var contract1 = {
                 meta: {company: companyId},
-                customer: 'notAcust',
-                //customers[0]._id,
+                customer: customers[0]._id,
+                
                 eventName: "Smith Rehearsal Dinner",
                 //description: "Test description",
                 natureOfEvent: "Plated full service dinner",

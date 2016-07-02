@@ -26,7 +26,12 @@ exports.getModelItems = function (req, res, model) {
         }
     }
     //create initial query
-    var query = (model.find(where));
+    if(req.params.id){
+        var query = model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company });
+    } else {
+        var query = (model.find(where));
+    }
+    
     //check for 'select' statements in the query string, add to mongoose query if they exist
     if(req.query.select){
         query.select(req.query.select);
@@ -53,6 +58,7 @@ exports.getModelItems = function (req, res, model) {
             query.populate(key, req.query.populate[key].select);
         }
     }
+    console.log(req.query);
     query.exec(function(err, collection){
         if(err){
             res.status(500);

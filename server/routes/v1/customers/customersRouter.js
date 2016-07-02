@@ -10,24 +10,26 @@ var router = express.Router();
 
 router.use(tokenProtection);
 router.get('/', function(req, res){
-    var population = {
-        path: 'contracts',
-        select: 'title eventDate'
-    };
-    controller.getModelItemsAndPopulate(req, res, Customer, population);
+    // var population = {
+    //     path: 'contracts',
+    //     select: 'title eventDate'
+    // };
+    var population = {'contracts': {'select':'title eventDate'}};
+    req.query.populate = population;
+    controller.getModelItems(req, res, Customer);
 });
 router.get('/:id', function(req, res){
   //var population = ['contacts', 'title'];
-  var population = {
-      path: 'contracts',
-      select: 'title eventDate'
-  };
-  controller.getModelItemByIdAndPoplulate(req, res, Customer, population);
+  var population = {'contracts': {'select':'title eventDate'}};
+  req.query.populate = population;
+  
+  controller.getModelItems(req, res, Customer);
 });
 router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Customer);
 });
 router.put('/:id', function(req, res){
+    // after update we must repopulate the object
     var population = {
         path: 'contracts',
         select: 'title eventDate'

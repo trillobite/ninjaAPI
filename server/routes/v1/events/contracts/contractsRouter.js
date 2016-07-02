@@ -10,9 +10,13 @@ var router = express.Router();
 
 router.use(tokenProtection);
 router.get('/', function(req, res){
+  var population = {'customer': {'select':''}};
+    req.query.populate = population;
   controller.getModelItems(req, res, Contract);
 });
 router.get('/:id', function(req, res){
+  var population = {'customer': {'select':''}};
+    req.query.populate = population;
   controller.getModelItemById(req, res, Contract);
 });
 router.delete('/:id', function(req, res){
