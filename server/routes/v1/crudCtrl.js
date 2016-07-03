@@ -67,7 +67,7 @@ exports.getModelItems = function (req, res, model) {
         // if (!collection.length) {
         //     //res.status(404);
         //     return res.send({noData: true, data: collection})
-        // }
+        // } 
         res.send({data:collection});
 
 
