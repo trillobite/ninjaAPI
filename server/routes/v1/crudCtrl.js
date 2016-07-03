@@ -64,10 +64,10 @@ exports.getModelItems = function (req, res, model) {
             res.status(500);
             return res.send({reason: err.toString()})
         }
-        if (!collection.length) {
-            //res.status(404);
-            return res.send({noData: true, data: collection})
-        }
+        // if (!collection.length) {
+        //     //res.status(404);
+        //     return res.send({noData: true, data: collection})
+        // }
         res.send({data:collection});
 
 
