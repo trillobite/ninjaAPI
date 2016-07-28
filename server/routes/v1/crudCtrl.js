@@ -74,19 +74,27 @@ exports.getModelItems = function (req, res, model) {
     });
 };
 
+exports.updateModelItem = function (req, res, model) {
+    var query = model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true});
+    if(req.query.populate){
+        for(var key in req.query.populate) {
+            query.populate(key, req.query.populate[key].select);
+        }
+    }
+    query.exec(function(err, collection){
+        if(err){
+            res.status(500);
+            return res.send({reason: err.toString()})
+        }
+        res.send({data:collection});
+    });
+};
+
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
-    
-    
-    
     var query = model.find({'meta.company':req.user.meta.company});
     
     if (req.query.populate) {
-        // foreach key populate
-            //query.populate
     }
-     
-    
-    
     query.populate(population)
     query.exec(function(err, collection){
         if(err){
@@ -123,7 +131,7 @@ exports.getModelItemById = function (req, res, model) {
     
 };
 
-exports.createModelItem = function (req, res, model) {
+exports.createModelItem = function (req, res, model, population) {
     var modelItemData = req.body;
     // set the meta company
     modelItemData.meta = {company: req.user.meta.company};
@@ -135,22 +143,7 @@ exports.createModelItem = function (req, res, model) {
             res.status(400);
             return res.send({ reason: err.toString() });
         }
-        res.send({data: modelItem.toObject()});
-    });
-};
-
-exports.updateModelItem = function (req, res, model, population) {
-    //delete req.body._id;
-    //req.body["meta.dateLastMod"] = Date.now();
-
-    model.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, modelItem) {
-        if (err) {
-            console.log(err);
-            res.status(400);
-            return res.send({ reason: err.toString() });
-        }
-        
-        
+        console.log(modelItem);
         if (population) {
             modelItem.populate(population, function (err, returnItem) {
                 res.send({data: returnItem.toObject()});
@@ -158,10 +151,10 @@ exports.updateModelItem = function (req, res, model, population) {
         } else {
             res.send({data: modelItem.toObject()});
         }
-        
-        
     });
 };
+
+
 
 exports.deleteModelItem = function (req, res, model) {
     model.remove({ _id: req.params.id }, function (err) {

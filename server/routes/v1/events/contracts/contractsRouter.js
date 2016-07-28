@@ -23,10 +23,12 @@ router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Contract);
 });
 router.put('/:id', function(req, res){
-  controller.updateModelItem(req, res, Contract);
+  var population = {'customer': {'select':''}};
+  req.query.populate = population;
+  controller.updateModelItem(req, res, Contract, population);
 });
 router.post('/', function(req, res){
-  controller.createModelItem(req, res, Contract);
+  controller.createModelItem(req, res, Contract, population);
 });
 
 
