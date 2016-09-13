@@ -129,9 +129,10 @@ exports.getModelItemById = function (req, res, model) {
         res.send({data:object});
     });
     
-};
+};  
 
 exports.createModelItem = function (req, res, model, population) {
+    
     var modelItemData = req.body;
     // set the meta company
     modelItemData.meta = {company: req.user.meta.company};
@@ -143,9 +144,8 @@ exports.createModelItem = function (req, res, model, population) {
             res.status(400);
             return res.send({ reason: err.toString() });
         }
-        console.log(modelItem);
         if (population) {
-            modelItem.populate(population, function (err, returnItem) {
+            model.populate(modelItem, population, function (err, returnItem) {
                 res.send({data: returnItem.toObject()});
             });
         } else {

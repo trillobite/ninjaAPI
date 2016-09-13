@@ -28,6 +28,8 @@ router.put('/:id', function(req, res){
   controller.updateModelItem(req, res, Contract, population);
 });
 router.post('/', function(req, res){
+  var population = { path: 'customer', select: ''};
+  req.query.populate = population;
   controller.createModelItem(req, res, Contract, population);
 });
 
