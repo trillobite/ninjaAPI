@@ -38,7 +38,8 @@ function createDefaultContracts(companyId, customers) {
                     description: "test Description"
                 }],
                 menuItems: [],
-                status: ["In communication"],
+                status: ["pending"],
+                contract: false,
                 notes: "test notes"
             }
             
