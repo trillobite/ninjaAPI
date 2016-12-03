@@ -15,7 +15,7 @@ function createDefaultMenuItems(companyId) {
             var menuItem1 = {
                 meta: { company: companyId },
                 name: 'Mexican Fiesta',
-                description: `Southwest Caesar Salad, Pork Tenderloin with Tomatillo Sauce, Chicken Enchiladas, Spanish Rice, Tortilla Chips, Salsa, Homemade Guacamole, Flan Cups`,
+                description: 'Southwest Caesar Salad, Pork Tenderloin with Tomatillo Sauce, Chicken Enchiladas, Spanish Rice, Tortilla Chips, Salsa, Homemade Guacamole, Flan Cups',
                 title: 'Mexican Fiesta',
                 subtitle: 'Mexican Fiesta',
                 notes: '',
@@ -25,7 +25,7 @@ function createDefaultMenuItems(companyId) {
             var menuItem2 = { 
                 meta: { company: companyId }, 
                 name: 'Italian Buffet', 
-                description: `Panzanella Salad, Grilled Vegetable Lasagna, Penne Bolognese, Grilled Squash and Eggplant, Garlic Cheese Toast, Tiramisu Cups`, 
+                description: 'Panzanella Salad, Grilled Vegetable Lasagna, Penne Bolognese, Grilled Squash and Eggplant, Garlic Cheese Toast, Tiramisu Cups', 
                 title: 'Italian Buffet', 
                 subtitle: 'Italian Buffet', 
                 notes: '', 
@@ -34,7 +34,7 @@ function createDefaultMenuItems(companyId) {
             var menuItem3 = { 
                 meta: { company: companyId }, 
                 name: 'Taste of Thai', 
-                description: `Green Salad with Chili Lime Dressing, Thai Chicken Pasta, Thai Beef, Red Curry Rissotto, Spring Rolls, Thai Creme Caramel`, 
+                description: 'Green Salad with Chili Lime Dressing, Thai Chicken Pasta, Thai Beef, Red Curry Rissotto, Spring Rolls, Thai Creme Caramel', 
                 title: 'Taste of Thai', 
                 subtitle: 'Taste of Thai', 
                 notes: '', 
@@ -43,7 +43,7 @@ function createDefaultMenuItems(companyId) {
             var menuItem4 = { 
                 meta: { company: companyId }, 
                 name: 'French Elegance', 
-                description: `Mixed Greens with French Dressing, Beef Bourguignon, Chicken Cordon Bleu, Potatoes au Gratin, Ratatouille, Strawberry Crepes`, 
+                description: 'Mixed Greens with French Dressing, Beef Bourguignon, Chicken Cordon Bleu, Potatoes au Gratin, Ratatouille, Strawberry Crepes', 
                 title: 'French Elegance', 
                 subtitle: 'French Elegance', 
                 notes: '', 
