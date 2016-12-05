@@ -93,7 +93,7 @@ exports.updateUser = function(req, res){
         delete user.salt;
         delete user.hashed_pwd;
         
-        res.send(user);
+        res.send({data: user});
     });
     
 

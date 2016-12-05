@@ -14,6 +14,6 @@ router.use(tokenProtection);
 router.get('/', controller.getUsers);
 router.get('/:id', controller.getUserById);
 router.post('/', auth.isActivityAuthorized('POST /api/users'), controller.createUser);
-router.put('/', auth.isActivityAuthorized('PUT /api/users'), controller.updateUser);
+router.put('/:id', auth.isActivityAuthorized('PUT /api/users'), controller.updateUser);
 
 module.exports = router;

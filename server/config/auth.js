@@ -21,7 +21,7 @@ exports.authenticate2 = function(req, res, next) {
             if(!user.authenticate(pwd)) {
                 res.json({success: false, message: "Authentication failed. Username and Password combination no worky!"});
             } else {
-                
+                console.log(user);
                 user = user.toObject();
                 delete user.hashed_pwd;
                 delete user.salt;
