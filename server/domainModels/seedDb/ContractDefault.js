@@ -34,7 +34,7 @@ function createDefaultContracts(companyId, customers) {
                 commLog: [{
                     date: "1/12/2016",
                     commType: "email",
-                    rep: "susan",
+                    employee: "susan",
                     description: "test Description"
                 }],
                 menuItems: [],

@@ -15,7 +15,8 @@ function createDefaultLookups(companyId) {
             var lookup = {
                 meta: {company: companyId},
                 menuItemTags: ['Appetizer', 'Soup', 'Salad', 'Entree', 'Dessert'],
-                contactTags: ['Home','Cell','Work']
+                contactTags: ['Home','Cell','Work'],
+                commTypes: ['email', 'phone', 'mail', 'in-person', 'other']
             };
             Lookups.create(lookup, function (err, item1) {
                 if (err) {
