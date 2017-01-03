@@ -5,10 +5,11 @@ var tokenProtection = require('../../../../config/routeMiddleware');
 
 
 
- //http://stackoverflow.com/questions/15995461/node-js-pass-variable-to-route
+// http://stackoverflow.com/questions/15995461/node-js-pass-variable-to-route
 var router = express.Router();
 
 router.use(tokenProtection);
+
 router.get('/', function(req, res){
   controller.getModelItems(req, res, Venue);
 });

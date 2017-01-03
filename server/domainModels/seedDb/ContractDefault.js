@@ -28,9 +28,15 @@ function createDefaultContracts(companyId, customers) {
                 startTime: new Date('2016-12-26T03:00:00Z'),
                 price: 10000,
                 eventSteps: [{
-                    time: 0800,
+                    time: '2016-12-26T03:00:00Z',
                     duration: 60,
-                    description: "Guests arrive"}],
+                    description: "Guests arrive"},{
+                    time:'2016-12-26T03:00:00Z',
+                    duration: 60,
+                    description: "Guests eat"},{
+                    time: '2016-12-26T03:00:00Z',
+                    duration: 60,
+                    description: "Guests leave"}],
                 commLog: [{
                     date: "1/12/2016",
                     commType: "email",
