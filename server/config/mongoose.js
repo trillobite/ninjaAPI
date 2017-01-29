@@ -14,15 +14,17 @@ module.exports = function (config) {
         console.log('ninjaAPI db opened');
     });
 
-   initialSeed();
+    if (process.env.NODE_ENV !== "production") {
+        initialSeed();
+    }
 
 };
-   
-    
-    
-    
-    
-    
+
+
+
+
+
+
 
 
 
