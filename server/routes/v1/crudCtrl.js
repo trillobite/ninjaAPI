@@ -10,8 +10,7 @@
 //example query string
 //http://localhost:3001/api/v1/events/contracts?moreThan[price]=3000&like[notes]=this&select=name+description+menuItems+price&populate[menuItems][select]=name+descrpiton
 
-exports.getModelItems = function (req, res, model) {
-    console.log(req);
+ exports.getModelItems = function (req, res, model) {
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.company;
     }
@@ -22,6 +21,14 @@ exports.getModelItems = function (req, res, model) {
         for (var key in req.query.like) {
             if (req.query.like.hasOwnProperty(key)) {
                 where[key] = new RegExp(req.query.like[key], 'i');
+            }
+        }
+    }
+    if(req.query.startsWith){
+        console.log("in here");
+        for (var key in req.query.startsWith) {
+            if (req.query.startsWith.hasOwnProperty(key)) {
+                where[key] = new RegExp("^" + req.query.startsWith[key], 'i');
             }
         }
     }
@@ -47,8 +54,9 @@ exports.getModelItems = function (req, res, model) {
         }
     }
     //check for paging request in the query string
+    console.log(req.query.sort);
     if(req.query.page){
-        query.limit(req.query.page.size);
+        query.limit(parseInt(req.query.page.size));
         query.skip(req.query.page.size * (req.query.page.number - 1));
         query.sort(req.query.sort);
     }
