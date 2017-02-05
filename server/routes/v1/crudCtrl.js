@@ -11,12 +11,12 @@
 //http://localhost:3001/api/v1/events/contracts?moreThan[price]=3000&like[notes]=this&select=name+description+menuItems+price&populate[menuItems][select]=name+descrpiton
 
 exports.getModelItems = function (req, res, model) {
-
+    console.log(req);
     if(req.query.where) {
-        req.query.where["meta.company"] = req.user.meta.company;
+        req.query.where["meta.company"] = req.user.company;
     }
     //use either the where statement from the query, or an empty one with just the company selector
-    var where = req.query.where || {'meta.company':req.user.meta.company};
+    var where = req.query.where || {'meta.company':req.user.company};
     //check for 'like' statements in query string, add to the where statement if they exist
     if(req.query.like){
         for (var key in req.query.like) {
@@ -27,7 +27,7 @@ exports.getModelItems = function (req, res, model) {
     }
     //create initial query
     if(req.params.id){
-        var query = model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company });
+        var query = model.findOne({ _id: req.params.id, 'meta.company':req.user.company });
     } else {
         var query = (model.find(where));
     }
