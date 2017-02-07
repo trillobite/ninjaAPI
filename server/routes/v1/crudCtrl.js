@@ -99,7 +99,7 @@ exports.updateModelItem = function (req, res, model) {
 };
 
 exports.getModelItemsAndPopulate = function (req, res, model, population) {
-    var query = model.find({'meta.company':req.user.meta.company});
+    var query = model.find({'meta.company':req.user.company});
     
     if (req.query.populate) {
     }
@@ -119,7 +119,7 @@ exports.getModelItemsAndPopulate = function (req, res, model, population) {
 };
 
 exports.getModelItemById = function (req, res, model) {
-    var query = model.findOne({ _id: req.params.id, 'meta.company':req.user.meta.company });
+    var query = model.findOne({ _id: req.params.id, 'meta.company':req.user.company });
     if(req.query.populate){
         for(var key in req.query.populate) {
             query.populate(key, req.query.populate[key].select);
@@ -143,7 +143,7 @@ exports.createModelItem = function (req, res, model, population) {
     
     var modelItemData = req.body;
     // set the meta company
-    modelItemData.meta = {company: req.user.meta.company};
+    modelItemData.meta = {company: req.user.company};
     var now = Date.now();
     modelItemData.meta.dateCreated = now;
     modelItemData.meta.dateLastMod = now;
