@@ -1,4 +1,4 @@
-var userSchema = require ('../schemas/account/UserSchema');
+var userSchema = require('../schemas/account/UserSchema');
 
 var encrypt = require('../../utilities/encryption');
 
@@ -12,14 +12,20 @@ userSchema.methods = {
 };
 
 //adding security fields here
-userSchema.salt = {
-    type:String, 
-    required:"{PATH} is required!"
-}
 
-userSchema.hashed_pwd = {
-    type:String, 
-    required:"{PATH} is required!"
+var newFields = {
+    "salt": {
+        type: String,
+        required: "{PATH} is required!"
+    },
+    "hashed_pwd": {
+        type: String,
+        required: "{PATH} is required!"
+    }
 }
+userSchema.add(newFields);
+
+console.log(userSchema);
+
 
 module.exports = userSchema;
