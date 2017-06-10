@@ -11,4 +11,15 @@ userSchema.methods = {
     }
 };
 
+//adding security fields here
+userSchema.salt = {
+    type:String, 
+    required:"{PATH} is required!"
+}
+
+userSchema.hashed_pwd = {
+    type:String, 
+    required:"{PATH} is required!"
+}
+
 module.exports = userSchema;
