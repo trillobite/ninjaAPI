@@ -10,22 +10,30 @@ module.exports = {
         email_un: 'banquet.ninja@gmail.com',
         email_pw: 'BailyRobertson'
     },
+    // stage: {
+    //     secret: 'ninjaApiRox',
+    //     rootPath: rootPath,
+    //     db: 'mongodb://patterncoder:y5EQJ5m7C3@ds054298.mongolab.com:54298/ninjaapi',
+    //     port: process.env.PORT || 80,
+    //     email_un: 'banquet.ninja@gmail.com',
+    //     email_pw: 'BailyRobertson'
+    // },
     stage: {
-        secret: 'ninjaApiRox',
-        rootPath: rootPath,
-        db: 'mongodb://patterncoder:y5EQJ5m7C3@ds054298.mongolab.com:54298/ninjaapi',
-        port: process.env.PORT || 80,
-        email_un: 'banquet.ninja@gmail.com',
-        email_pw: 'BailyRobertson'
-    },
-    production: {
         secret: 'ninjaApiRox',
         rootPath: rootPath,
         db: 'mongodb://patterncoder:lemein1969@104.131.151.131/ninjaAPI',
         port: process.env.PORT || 80,
         email_un: 'banquet.ninja@gmail.com',
         email_pw: 'BailyRobertson'
-    }
+    },
+    // production: {
+    //     secret: 'ninjaApiRox',
+    //     rootPath: rootPath,
+    //     db: 'mongodb://patterncoder:lemein1969@104.131.151.131/ninjaAPI',
+    //     port: process.env.PORT || 80,
+    //     email_un: 'banquet.ninja@gmail.com',
+    //     email_pw: 'BailyRobertson'
+    // }
 
 
 
