@@ -63,7 +63,7 @@
     //check for population request in the query string
     if(req.query.populate){
         for(var key in req.query.populate) {
-            query.populate(key, req.query.populate[key].select);
+            query.populate(key, req.query.populate[key]);
         }
     }
     console.log(req.query);
