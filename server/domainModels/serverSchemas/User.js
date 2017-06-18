@@ -25,7 +25,5 @@ var newFields = {
 }
 userSchema.add(newFields);
 
-console.log(userSchema);
-
 
 module.exports = userSchema;
