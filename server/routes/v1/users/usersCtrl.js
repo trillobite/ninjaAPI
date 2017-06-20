@@ -65,24 +65,27 @@ exports.createUser = function(req, res, next){
 };
 
 exports.updateUser = function(req, res){
-    
+    // temp fix
+    req.user.hasRole = function (role) {
+        return this.roles.indexOf(role) > -1;
+    }
+    console.log(req.body);
     var userUpdates = req.body;
     // this makes sure that the user making the request matches the user to update and that the user has the role of admin
     if(req.user._id != userUpdates._id && !req.user.hasRole('admin')){
         res.status(403);
         return res.end();
     }
+    // req.user.firstName = userUpdates.firstName;
+    // req.user.lastName = userUpdates.lastName;
+    // req.user.username = userUpdates.username;
+    // if(userUpdates.password && userUpdates.password.length > 0){
 
-    req.user.firstName = userUpdates.firstName;
-    req.user.lastName = userUpdates.lastName;
-    req.user.username = userUpdates.username;
-    if(userUpdates.password && userUpdates.password.length > 0){
-
-        req.user.salt = encrypt.createSalt();
-        req.user.hashed_pwd = encrypt.hashPwd(req.user.salt, userUpdates.password);
-    }
-    
-    User.findByIdAndUpdate({_id: req.user._id}, req.user, {new: true},function (err,user) {
+    //     req.user.salt = encrypt.createSalt();
+    //     req.user.hashed_pwd = encrypt.hashPwd(req.user.salt, userUpdates.password);
+    // }
+    console.log(req.body._id);
+    User.findByIdAndUpdate({_id: req.body._id}, req.body, {new: true},function (err,user) {
         if (err) {
             console.log(err.toString());
             res.status(400);
