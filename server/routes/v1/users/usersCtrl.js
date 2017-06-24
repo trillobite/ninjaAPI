@@ -1,3 +1,4 @@
+'use strict';
 
 var User = require('mongoose').model('User');
 var encrypt = require('../../../utilities/encryption');
@@ -31,8 +32,10 @@ exports.userExists = function(req,res){
 };
 
 exports.createUser = function(req, res, next){
-
     var userData = req.body;
+    // temp fix for now
+    userData.meta.company = req.user.company;
+    console.log(userData);
     if (req.body.password.length < 8){
         console.log('password is too short');
     }
@@ -41,25 +44,26 @@ exports.createUser = function(req, res, next){
     userData.salt = encrypt.createSalt();
     userData.hashed_pwd = encrypt.hashPwd(userData.salt, userData.password);
     User.create(userData, function(err, user){
-        //console.log("I am here.")
         if(err){
+            console.log(`this is the error:${err}`);
             if(err.toString().indexOf('E11000')>-1){
                 err = new Error('Duplicate Username');
             }
             res.status(400);
             return res.send({reason:err.toString()});
         }
-
-        req.login(user, function (err) {
-            if (err) { return next(err); }
-            //console.log(user);
-            user = user.toObject();
-            
-            delete user.salt;
-            delete user.hashed_pwd;
-            res.send(user);
-        });
-
+        var newUser = user.toObject();
+        console.log(newUser);
+        delete newUser.salt;
+        delete newUser.hashed_pwd;
+        if(req.baseUrl === "/api/v1/users"){
+            res.send(newUser);
+        } else {
+            req.login(user, function (err) {            
+                if (err) { return next(err); }
+                res.send(newUser);
+            });
+        }
     });
 
 };
@@ -69,7 +73,7 @@ exports.updateUser = function(req, res){
     req.user.hasRole = function (role) {
         return this.roles.indexOf(role) > -1;
     }
-    console.log(req.body);
+    
     var userUpdates = req.body;
     // this makes sure that the user making the request matches the user to update and that the user has the role of admin
     if(req.user._id != userUpdates._id && !req.user.hasRole('admin')){
@@ -84,7 +88,7 @@ exports.updateUser = function(req, res){
     //     req.user.salt = encrypt.createSalt();
     //     req.user.hashed_pwd = encrypt.hashPwd(req.user.salt, userUpdates.password);
     // }
-    console.log(req.body._id);
+    
     User.findByIdAndUpdate({_id: req.body._id}, req.body, {new: true},function (err,user) {
         if (err) {
             console.log(err.toString());
@@ -103,3 +107,4 @@ exports.updateUser = function(req, res){
 
 
 };
+
