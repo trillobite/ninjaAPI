@@ -31,11 +31,25 @@ exports.userExists = function(req,res){
     });
 };
 
+
+// function IsJsonString(str) {
+//     try {
+//         JSON.parse(str);
+//         console.log("this is valid json");
+//     } catch (e) {
+//         console.log(`error: ${e}`);
+//         // return false;
+//     }
+//     return true;
+// }
+
 exports.createUser = function(req, res, next){
     var userData = req.body;
-    // temp fix for now
-    userData.meta.company = req.user.company;
-    console.log(userData);
+    
+    userData["meta"] = {
+        "company": req.user.company
+    };
+    
     if (req.body.password.length < 8){
         console.log('password is too short');
     }
@@ -43,7 +57,8 @@ exports.createUser = function(req, res, next){
     userData.username = userData.username.toLowerCase();
     userData.salt = encrypt.createSalt();
     userData.hashed_pwd = encrypt.hashPwd(userData.salt, userData.password);
-    User.create(userData, function(err, user){
+    let addUser = new User(userData);
+    addUser.save(function(err){
         if(err){
             console.log(`this is the error:${err}`);
             if(err.toString().indexOf('E11000')>-1){
@@ -52,19 +67,18 @@ exports.createUser = function(req, res, next){
             res.status(400);
             return res.send({reason:err.toString()});
         }
-        var newUser = user.toObject();
-        console.log(newUser);
-        delete newUser.salt;
-        delete newUser.hashed_pwd;
-        if(req.baseUrl === "/api/v1/users"){
-            res.send(newUser);
-        } else {
-            req.login(user, function (err) {            
-                if (err) { return next(err); }
-                res.send(newUser);
-            });
-        }
     });
+    // var newUser = addUser.toObject();
+    // delete newUser.salt;
+    // delete newUser.hashed_pwd;
+    if(req.baseUrl === "/api/v1/users"){
+        res.sendStatus(200);
+    } else {
+        req.login(user, function (err) {            
+            if (err) { return next(err); }
+            res.send(JSON.stringify(user));
+        });
+    }    
 
 };
 
