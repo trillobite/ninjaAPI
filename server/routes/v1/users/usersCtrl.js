@@ -31,56 +31,39 @@ exports.userExists = function(req,res){
     });
 };
 
-
-// function IsJsonString(str) {
-//     try {
-//         JSON.parse(str);
-//         console.log("this is valid json");
-//     } catch (e) {
-//         console.log(`error: ${e}`);
-//         // return false;
-//     }
-//     return true;
-// }
-
 exports.createUser = function(req, res, next){
+
     var userData = req.body;
-    
-    userData["meta"] = {
-        "company": req.user.company
-    };
-    
     if (req.body.password.length < 8){
         console.log('password is too short');
     }
-    
+
+    userData.meta.company = req.user.company;
     userData.username = userData.username.toLowerCase();
     userData.salt = encrypt.createSalt();
     userData.hashed_pwd = encrypt.hashPwd(userData.salt, userData.password);
-    let addUser = new User(userData);
-    addUser.save(function(err){
+    User.create(userData, function(err, user){
         if(err){
-            console.log(`this is the error:${err}`);
             if(err.toString().indexOf('E11000')>-1){
                 err = new Error('Duplicate Username');
             }
             res.status(400);
             return res.send({reason:err.toString()});
         }
+
+        if(req.baseUrl === "/api/v1/users"){
+            res.sendStatus(200);
+        } else {
+            req.login(user, function (err) {            
+                if (err) { return next(err); }
+                res.send(JSON.stringify(user));
+            });
+        }  
+
     });
-    // var newUser = addUser.toObject();
-    // delete newUser.salt;
-    // delete newUser.hashed_pwd;
-    if(req.baseUrl === "/api/v1/users"){
-        res.sendStatus(200);
-    } else {
-        req.login(user, function (err) {            
-            if (err) { return next(err); }
-            res.send(JSON.stringify(user));
-        });
-    }    
 
 };
+
 
 exports.updateUser = function(req, res){
     // temp fix
