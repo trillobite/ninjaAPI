@@ -50,13 +50,19 @@ exports.createUser = function(req, res, next){
             res.status(400);
             return res.send({reason:err.toString()});
         }
-
+            
         if(req.baseUrl === "/api/v1/users"){
-            res.sendStatus(200);
+            user = user.toObject();
+            delete user.salt;
+            delete user.hashed_pwd;            
+            res.send(user);
         } else {
             req.login(user, function (err) {            
                 if (err) { return next(err); }
-                res.send(JSON.stringify(user));
+                user = user.toObject();
+                delete user.salt;
+                delete user.hashed_pwd;                
+                res.send(user);
             });
         }  
 
