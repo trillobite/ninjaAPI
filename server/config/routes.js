@@ -21,7 +21,7 @@ module.exports = function (app) {
     });
     
     
-    app.options('*', function(req,res,next){ res.send(200);});
+    app.options('*', function(req,res,next){ res.sendStatus(200);});
     
     //simulate network latency!!!!
     //app.use(function(req,res,next){setTimeout(next,2000)});

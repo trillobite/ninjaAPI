@@ -16,7 +16,8 @@ function createDefaultLookups(companyId) {
                 meta: {company: companyId},
                 menuItemTags: ['Appetizer', 'Soup', 'Salad', 'Entree', 'Dessert'],
                 contactTags: ['Home','Cell','Work'],
-                commTypes: ['email', 'phone', 'mail', 'in-person', 'other']
+                commTypes: ['email', 'phone', 'mail', 'in-person', 'other'],
+                roles:['superUser', 'admin', 'gold', 'silver', 'bronze']
             };
             Lookups.create(lookup, function (err, item1) {
                 if (err) {
