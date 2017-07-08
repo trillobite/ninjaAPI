@@ -53,6 +53,11 @@
             query.where(key).gt(req.query.lessThan[key]);
         }
     }
+    if(req.query.notEqual) {
+        for(var key in req.query.notEqual){
+            query.where(key).ne(req.query.notEqual[key]);
+        }
+    }
     //check for paging request in the query string
     console.log(req.query.sort);
     if(req.query.page){
