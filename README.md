@@ -1,5 +1,18 @@
 # ninjaAPI
 
+## Startup
+
+This is a straight up JavaScript project so there is no build tool...
+
+```
+
+```
+
+
+-----------------
+
+# Old way below
+
 ## Project Dependencies
 
 * MongoDb
