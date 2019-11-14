@@ -13,6 +13,10 @@
  exports.getModelItems = function (req, res, model) {
     if(req.query.where) {
         req.query.where["meta.company"] = req.user.company;
+        if (req.query.where["eventDate"]) {
+          const dateParams = JSON.parse(req.query.where["eventDate"]);
+          req.query.where["eventDate"] = dateParams;
+        }
     }
     //use either the where statement from the query, or an empty one with just the company selector
     var where = req.query.where || {'meta.company':req.user.company};
@@ -42,6 +46,11 @@
     //check for 'select' statements in the query string, add to mongoose query if they exist
     if(req.query.select){
         query.select(req.query.select);
+    }
+    if(req.query.valueIn) {
+      for(var key in req.query.valueIn) {
+        query.where(key).in(Array.isArray(req.query.valueIn[key]) ? req.query.valueIn[key] : [req.query.valueIn[key]])
+      }
     }
     if(req.query.moreThan){
         for(var key in req.query.moreThan){

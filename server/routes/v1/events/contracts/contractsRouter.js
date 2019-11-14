@@ -1,5 +1,6 @@
 var express = require('express');
 var controller = require('../../crudCtrl');
+var contractsController = require('./contractsCtrl');
 var Contract = require('mongoose').model('Contract');
 var tokenProtection = require('../../../../config/routeMiddleware');
 
@@ -19,6 +20,9 @@ router.get('/:id', function(req, res){
   var population = {'customer': {'select':''}};
     req.query.populate = population;
   controller.getModelItemById(req, res, Contract);
+});
+router.get('/:id/view/pdf', function(req, res){
+  contractsController.viewPdf(req, res, Contract);
 });
 router.delete('/:id', function(req, res){
   controller.deleteModelItem(req, res, Contract);

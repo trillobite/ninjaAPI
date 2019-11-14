@@ -17,6 +17,7 @@
     "nodemailer": "^1.8.0",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0",
+    "pdfmake": "^0.1.61",
     "q": "^1.4.1",
     "request": "^2.65.0",
     "serve-favicon": "^2.3.0",
@@ -31,6 +32,7 @@
     "sinon": "^1.17.1"
   },
   "scripts": {
+    "dev": "nodemon --inspect=7000 server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
     "prod": "NODE_ENV=production PORT=3001 nodemon server.js"
