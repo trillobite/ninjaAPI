@@ -6,12 +6,12 @@ var strUtils = require('../../../../utilities/strings');
 module.exports = function(data) {
 
   
-  let sectionEventSteps = (events) => {
+  const sectionEventSteps = (events) => {
     return events && events.length > 0 ?
       `"Event Steps"`
       : "{}"
   };
-  let sectionRentalItems = (rentalItems) => {
+  const sectionRentalItems = (rentalItems) => {
     return rentalItems && rentalItems.length > 0 ?
       `"Rental Items"`
       : "{}"
