@@ -6,18 +6,24 @@ var strUtils = require('../../../../utilities/strings');
 module.exports = function (data) {
 
   // console.log("pdf data:", escape(data.notes));
+  const evntFoodTxt = `The following menu items will be available during the event in the assigned amounts. If there is to be a choice of menu items, the below numbers are estimates and the actual amounts will be reconciled at the conclusion of the event.`;
+  const endTimeFee = `$50.00`;
+  const endTimeTxt = `In order to better serve you, please keep in mind the end time of your party. Due to sequential bookings of parties during peak times (Friday and Saturday and especially durng the holiday season), we require that our guests adhere to the end time of their party so that our staff may prepare the room for the next party. You will be charged a late fee of ${endTimeFee} if your party exceeds the end time by more than 10 minutes.`;
+  const paybllingTxt = `A 50% installment (of the minimum food and beverage charge) will be required one week prior to your event. Your final bill will be the minimum food and beverage charge plus tax and 20% gratuity. If your bill exceeds the minimum food and beverage charge as defined above, then you will be charged the actual amount of the food and beverage purchases, plus tax and a 20% gratuity. Credit card payments only. No personal checks are accepted.`;
+  const weatherTxt = `For the Front Street Bar and Grill, please be aware that we do not have any contigency plans for incement weather. We do have suspended patio umbrellas and patio heaters for your comfort.`;
+  const menPricTxt = `At times the menus and pricing are subject to change. If your previous selections have been replaced, we will work with you to select an alternate substitution. Pricing will revert to the most current pricing.`;
 
   const sectionEventSteps = (events) => {
+    console.log("events:", events);
     return events && events.length > 0 ?
       `"Event Steps"`
       : "{}"
   };
+
   const sectionRentalItems = (rentalItems) => {
 
     let tmp = (arr) => {
-      console.log("rentalItems:", rentalItems);
       return arr.map((ri) => {
-        console.log("rentalItem:", ri);
         return `[
               { "stack": [ { "text": "${ri.name}", "style": ["bold", "fontSize10"] }] },
               {"text": "${ri.quantity}", "style": ["fontSize8"]},
@@ -38,7 +44,7 @@ module.exports = function (data) {
         }
       }`
 
-    return rentalTable;
+    return rentalItems && rentalTable;
   };
 
   let jsonDef = `
@@ -80,6 +86,7 @@ module.exports = function (data) {
       {"text": "Notes", "style": ["fontSize12", "marginTopBottom18"]},
       {"text": "${data.notes.replace(/\n/g, "\\n")}", "style": ["fontSize8"]},
       {"text": "Menu Items", "style": ["fontSize12", "marginTopBottom18"]},
+      {"text": "${evntFoodTxt}", "style": ["fontSize8"]},
       {
         "style": "tableExample",
         "table": {
@@ -101,28 +108,46 @@ module.exports = function (data) {
         }
       },
       ${sectionEventSteps(data.eventSteps)},
-      ${sectionRentalItems(data.rentalItems)}
+      ${sectionRentalItems(data.rentalItems)},
+      {
+        "style": "tableExample",
+        "table": {
+          "widths": [140, 75],
+          "body": [
+              ["Type", "Totals"],
+              [{"text": "Food Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Rental Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Discount", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Deposit", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Total Due", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}]
+          ]
+        }
+      },
+      {"text": "End Time", "style": ["fontSize10", "marginTopBottom18"]},
+      {"text": "${endTimeTxt}", "style": ["fontSize8"]},
+      {"text": "Payments and Billing", "style": ["fontSize10", "marginTopBottom18"]},
+      {"text": "${paybllingTxt}", "style": ["fontSize8"]},
+      {"text": "Inclement Weather", "style": ["fontSize10", "marginTopBottom18"]},
+      {"text": "${weatherTxt}", "style": ["fontSize8"]},
+      {"text": "Menus and Pricing", "style": ["fontSize10", "marginTopBottom18"]},
+      {"text": "${menPricTxt}", "style": ["fontSize8"]}
     ]
   }
   `
 
-  // {"text": "Notes", "style": ["fontSize16", "marginTopBottom18"]},
-  // {
-  //   "style": "tableExample",
-  //   "table": {
-  //     "widths": ["*"],
-  //     "body": [
-  //       ["Notes"],
-  //       [{"text": "${escape(data.notes)}", "style": []}],
-  //     ]
-  //   }
-  // },
-  console.log("docDef:", jsonDef);
+  // console.log("docDef:", jsonDef);
 
   let docDef = JSON.parse(jsonDef);
 
 
   docDef.styles = {
+    alignRight: {
+      alignment: "right",
+    },
     header: {
       fontSize: 18,
       bold: true,
