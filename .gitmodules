@@ -1,3 +1,3 @@
 [submodule "server/domainModels/schemas"]
 	path = server/domainModels/schemas
-	url = git://github.com/robertson74/ninjaSchemas.git
+	url = git://github.com/trillobite/ninjaSchemas.git
