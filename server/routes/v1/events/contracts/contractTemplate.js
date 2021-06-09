@@ -5,6 +5,45 @@ var strUtils = require('../../../../utilities/strings');
 
 module.exports = function (data) {
 
+  let totals = {
+    menuTotal: 0,
+    rentTotal: 0,
+    tax: 0,
+    gratuity: 0,
+    taxPercent: 0.0875,
+    gratuityPercent: 0.2,
+
+  };
+
+  const getMenuTotal = (menuItems) => {
+    console.log(menuItems);
+    let total = 0;
+    menuItems.map((obj) => {
+      total += (obj.quantity * obj.price);
+    });
+    totals.menuTotal = total;
+    return total;
+  };
+
+  const getRentTotal = (rentalItems) => {
+    console.log(rentalItems);
+    let total = 0;
+    rentalItems.map((obj) => {
+      total += obj.price;
+    });
+    totals.rentTotal= total;
+    return total;
+  };
+
+  const calcTax = (tax, total) => {
+    totals.tax = tax * total;
+    return totals.tax;
+  };
+
+  const calcGratuity = (percent, total) => {
+    totals.gratuity = percent * total;
+    return totals.gratuity;
+  };
   // console.log("pdf data:", escape(data.notes));
   const evntFoodTxt = `The following menu items will be available during the event in the assigned amounts. If there is to be a choice of menu items, the below numbers are estimates and the actual amounts will be reconciled at the conclusion of the event.`;
   const endTimeFee = `$50.00`;
@@ -23,6 +62,11 @@ module.exports = function (data) {
   const sectionRentalItems = (rentalItems) => {
 
     let tmp = (arr) => {
+      console.log("rental!!!!!!!!!!!!!!!!!", arr);
+      if(arr == []) {
+        return undefined;
+      }
+
       return arr.map((ri) => {
         return `[
               { "stack": [ { "text": "${ri.name}", "style": ["bold", "fontSize10"] }] },
@@ -38,8 +82,7 @@ module.exports = function (data) {
         "table": {
           "widths": ["*", 72, 72, 72],
           "body": [
-            ["Rental Item", "Quantity", "Price", "Extended"],
-            ${tmp(rentalItems)}
+            ["Rental Item", "Quantity", "Price", "Extended"]${tmp(rentalItems) ? "," + tmp(rentalItems) : ""}
           ]
         }
       }`
@@ -62,22 +105,15 @@ module.exports = function (data) {
             "stack": [
               { "text": "Customer", "style": ["fontSize12", "bold"] },
               { "text": ${`"${data.customer.firstName} ${data.customer.lastName}"`}, "style": ["fontSize10"] }
-              ${(data.customer.phoneNumbers.length > 0) ?
-      `,${data.customer.phoneNumbers.map(pn => `{ "text": "${pn.number} (${pn.contactType})", "style": [] }`).join(",")}`
-      : ""}
-              ${(data.customer.emails.length > 0) ?
-      `,${data.customer.emails.map(em => `{ "text": "${em.email} (${em.emailType})", "style": [] }`).join(",")}`
-      : ""}
-                  
-            ]
+              ${(data.customer.phoneNumbers.length > 0) ? `,${data.customer.phoneNumbers.map(pn => `{ "text": "${pn.number} (${pn.contactType})", "style": [] }`).join(",")}` : ""}
+              ${(data.customer.emails.length > 0) ? `,${data.customer.emails.map(em => `{ "text": "${em.email} (${em.emailType})", "style": [] }`).join(",")}` : ""}
+            ]      
           },
           {
             "stack": [
               { "text": "Event Details", "style": ["fontSize12", "bold"] },
               { "text": ${`"Event Name: ${data.eventName}"`}, "style": [] },
-              { "text": ${`"Event Date: ${
-    dateUtils.dateFormat1(data.eventDate)
-    }"`}, "style": [] },
+              { "text": ${`"Event Date: ${dateUtils.dateFormat1(data.eventDate)}"`}, "style": [] },
               { "text": ${`"Nature of Event: ${data.natureOfEvent}"`}, "style": [] }
             ]
           }
@@ -92,8 +128,8 @@ module.exports = function (data) {
         "table": {
           "widths": ["*", 72, 72, 72],
           "body": [
-            ["Menu Item", "Quantity", "Price", "Extended"],
-            ${data.menuItems.map(mi => {
+            ["Menu Item", "Quantity", "Price", "Extended"]
+            ${data.menuItems.length > 0 ? "," + data.menuItems.map(mi => {
             return `[
                       { "stack": [ 
                         { "text": "${mi.name}", "style": ["bold", "fontSize10"]}, 
@@ -103,7 +139,7 @@ module.exports = function (data) {
                       {"text": "${numUtils.convertToCurrencyString(mi.price)}", "style": ["fontSize8"]},
                       {"text": "${numUtils.convertToCurrencyString(mi.quantity * mi.price)}", "style": ["fontSize8"]}
                     ]`
-             }).join(",")}
+             }).join(",") : ""}
           ]
         }
       },
@@ -115,13 +151,13 @@ module.exports = function (data) {
           "widths": [140, 75],
           "body": [
               ["Type", "Totals"],
-              [{"text": "Food Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "Rental Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Food Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getMenuTotal(data.menuItems))}", "style": ["fontSize8"]}],
+              [{"text": "Rental Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getRentTotal(data.rentalItems))}", "style": ["fontSize8"]}],
+              [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcTax(totals.taxPercent, (totals.menuTotal + totals.rentTotal)))}", "style": ["fontSize8"]}],
+              [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcGratuity(totals.gratuityPercent, (totals.menuTotal + totals.rentTotal)))}", "style": ["fontSize8"]}],
+              [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "Discount", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
+              [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal) + totals.tax + totals.gratuity)}", "style": ["fontSize8"]}],
               [{"text": "Deposit", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
               [{"text": "Total Due", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}]
           ]
@@ -139,7 +175,7 @@ module.exports = function (data) {
   }
   `
 
-  // console.log("docDef:", jsonDef);
+  //console.log("docDef:", jsonDef);
 
   let docDef = JSON.parse(jsonDef);
 
