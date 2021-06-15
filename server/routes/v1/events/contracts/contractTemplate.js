@@ -10,40 +10,46 @@ module.exports = function (data) {
     rentTotal: 0,
     tax: 0,
     gratuity: 0,
+  };
+
+  const fees = {
     taxPercent: 0.0875,
     gratuityPercent: 0.2,
+  };
 
+  const totalIt = (items) => {
+    // console.log("items:", items);
+    let total = 0;
+    items.map((obj) => {
+      if(obj.quantity == undefined) {
+        total += obj.price;
+      } else {
+        total += (obj.quantity * obj.price);
+      }
+    });
+    return total;
   };
 
   const getMenuTotal = (menuItems) => {
-    console.log(menuItems);
-    let total = 0;
-    menuItems.map((obj) => {
-      total += (obj.quantity * obj.price);
-    });
-    totals.menuTotal = total;
-    return total;
+    totals.menuTotal = totalIt(menuItems);
+    return totals.menuTotal;
   };
 
   const getRentTotal = (rentalItems) => {
-    console.log(rentalItems);
-    let total = 0;
-    rentalItems.map((obj) => {
-      total += obj.price;
-    });
-    totals.rentTotal= total;
-    return total;
+    totals.rentTotal = totalIt(rentalItems);
+    return totals.rentTotal;
   };
 
-  const calcTax = (tax, total) => {
-    totals.tax = tax * total;
+  const calcTax = (total) => {
+    totals.tax = fees.taxPercent * total;
     return totals.tax;
   };
 
-  const calcGratuity = (percent, total) => {
-    totals.gratuity = percent * total;
+  const calcGratuity = (total) => {
+    totals.gratuity = fees.gratuityPercent * total;
     return totals.gratuity;
   };
+
   // console.log("pdf data:", escape(data.notes));
   const evntFoodTxt = `The following menu items will be available during the event in the assigned amounts. If there is to be a choice of menu items, the below numbers are estimates and the actual amounts will be reconciled at the conclusion of the event.`;
   const endTimeFee = `$50.00`;
@@ -153,8 +159,8 @@ module.exports = function (data) {
               ["Type", "Totals"],
               [{"text": "Food Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getMenuTotal(data.menuItems))}", "style": ["fontSize8"]}],
               [{"text": "Rental Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getRentTotal(data.rentalItems))}", "style": ["fontSize8"]}],
-              [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcTax(totals.taxPercent, (totals.menuTotal + totals.rentTotal)))}", "style": ["fontSize8"]}],
-              [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcGratuity(totals.gratuityPercent, (totals.menuTotal + totals.rentTotal)))}", "style": ["fontSize8"]}],
+              [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcTax(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
+              [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcGratuity(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "Discount", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
               [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal) + totals.tax + totals.gratuity)}", "style": ["fontSize8"]}],
