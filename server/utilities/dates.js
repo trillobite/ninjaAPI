@@ -4,6 +4,11 @@ const DateUtils = {
     let date = new Date(dateString);
     return `${DateUtils.days[date.getDay()].fullName} ${DateUtils.months[date.getMonth()].shortName} ${date.getDate()}, ${date.getFullYear()}`
   },
+  timeFormat1: (dateString) => {
+    let date = new Date(dateString);
+    var h =  date.getHours(), m = date.getMinutes();
+    return (h > 12) ? (h-12 + ':' + m +' PM') : (h + ':' + m +' AM');
+  },
   days: [
     {fullName: "Sunday", shortName: "Sun"},
     {fullName: "Monday", shortName: "Mon"},

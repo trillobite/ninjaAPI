@@ -4,12 +4,15 @@ var numUtils = require('../../../../utilities/numbers');
 var strUtils = require('../../../../utilities/strings');
 
 module.exports = function (data) {
+  console.log("HERE'S THE DATA!!:", data.venues);
 
   let totals = {
     menuTotal: 0,
     rentTotal: 0,
     tax: 0,
     gratuity: 0,
+    discount: 0,
+    deposit: 0
   };
 
   const fees = {
@@ -48,6 +51,29 @@ module.exports = function (data) {
   const calcGratuity = (total) => {
     totals.gratuity = fees.gratuityPercent * total;
     return totals.gratuity;
+  };
+
+  const getTotal = () => {
+    let total = ((totals.menuTotal + totals.rentTotal) + totals.tax + totals.gratuity) - totals.discount;
+    return total;
+  };
+
+  const getTotalDue = () => {
+    let totalDue = getTotal();
+    totalDue -= totals.deposit;
+    return totalDue;
+  };
+
+  const getVenues = (arrVenue) => {
+    console.log("venues:", arrVenue);
+    let str = "";
+    arrVenue.map((obj) => {
+      if(str.length > 0) {
+        str += ",";
+      }
+      str += obj.name;
+    });
+    return str;
   };
 
   // console.log("pdf data:", escape(data.notes));
@@ -120,6 +146,8 @@ module.exports = function (data) {
               { "text": "Event Details", "style": ["fontSize12", "bold"] },
               { "text": ${`"Event Name: ${data.eventName}"`}, "style": [] },
               { "text": ${`"Event Date: ${dateUtils.dateFormat1(data.eventDate)}"`}, "style": [] },
+              { "text": ${`"Event Time: ${dateUtils.timeFormat1(data.time)} to ${dateUtils.timeFormat1(data.endTime)}"`}, "style": [] },
+              { "text": ${`"Location: ${getVenues(data.venues)}"`}, "style": []},
               { "text": ${`"Nature of Event: ${data.natureOfEvent}"`}, "style": [] }
             ]
           }
@@ -162,10 +190,10 @@ module.exports = function (data) {
               [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcTax(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcGratuity(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
-              [{"text": "Discount", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal) + totals.tax + totals.gratuity)}", "style": ["fontSize8"]}],
-              [{"text": "Deposit", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}],
-              [{"text": "Total Due", "style": ["fontSize8", "alignRight"]}, {"text": "0", "style": ["fontSize8"]}]
+              [{"text": "Discount", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(totals.discount)}", "style": ["fontSize8"]}],
+              [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getTotal())}", "style": ["fontSize8"]}],
+              [{"text": "Deposit", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(totals.deposit)}", "style": ["fontSize8"]}],
+              [{"text": "Total Due", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getTotalDue())}", "style": ["fontSize8"]}]
           ]
         }
       },
@@ -181,7 +209,7 @@ module.exports = function (data) {
   }
   `
 
-  //console.log("docDef:", jsonDef);
+  // console.log("docDef:", jsonDef);
 
   let docDef = JSON.parse(jsonDef);
 
