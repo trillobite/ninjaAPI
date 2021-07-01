@@ -46,7 +46,7 @@ module.exports = function (data) {
   const getDepositTotal = (depositItems) => {
     let total = 0;
     depositItems.map((deposit) => {
-      if(deposit.completed != false) {
+      if(deposit.dateComplete) {
         total += deposit.amount;
       }
     });
@@ -164,10 +164,7 @@ module.exports = function (data) {
           }
         ]
       },
-      {"text": "Notes", "style": ["fontSize12", "marginTopBottom18"]},
-      {"text": "${data.notes.replace(/\n/g, "\\n")}", "style": ["fontSize8"]},
-      {"text": "Menu Items", "style": ["fontSize12", "marginTopBottom18"]},
-      {"text": "${evntFoodTxt}", "style": ["fontSize8"]},
+      {"text": "${evntFoodTxt}", "style": ["fontSize8", "marginTop20"]},
       {
         "style": "tableExample",
         "table": {
@@ -201,13 +198,14 @@ module.exports = function (data) {
               [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcTax(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcGratuity(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
               [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
-              [{"text": "Discount", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(totals.discount)}", "style": ["fontSize8"]}],
               [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getTotal())}", "style": ["fontSize8"]}],
               [{"text": "Deposit", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getDepositTotal(data.deposits))}", "style": ["fontSize8"]}],
               [{"text": "Total Due", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getTotalDue())}", "style": ["fontSize8"]}]
           ]
         }
       },
+      {"text": "Notes", "style": ["fontSize12", "marginTopBottom18"]},
+      {"text": "${data.notes.replace(/\n/g, "\\n")}", "style": ["fontSize8"]},
       {"text": "End Time", "style": ["fontSize10", "marginTopBottom18"]},
       {"text": "${endTimeTxt}", "style": ["fontSize8"]},
       {"text": "Payments and Billing", "style": ["fontSize10", "marginTopBottom18"]},
@@ -241,6 +239,12 @@ module.exports = function (data) {
     superMargin: {
       margin: [20, 0, 40, 0],
       fontSize: 13
+    },
+    marginTop10: {
+      margin: [0, 10, 0, 0],
+    },
+    marginTop20: {
+      margin: [0, 20, 0, 0],
     },
     marginTopBottom18: {
       margin: [0, 18]
