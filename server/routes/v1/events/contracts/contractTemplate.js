@@ -204,7 +204,11 @@ module.exports = function (data) {
           ]
         }
       },
-      {"text": "Notes", "style": ["fontSize12", "marginTopBottom18"]},
+      {
+        "text": "Notes", 
+        "style": ["fontSize12", "marginTopBottom18"],
+        "pageBreak": "before"
+      },
       {"text": "${data.notes.replace(/\n/g, "\\n")}", "style": ["fontSize8"]},
       {"text": "End Time", "style": ["fontSize10", "marginTopBottom18"]},
       {"text": "${endTimeTxt}", "style": ["fontSize8"]},
