@@ -21,6 +21,9 @@ router.get('/:id', function(req, res){
     req.query.populate = population;
   controller.getModelItemById(req, res, Contract);
 });
+router.get('/:id/view/handoutPdf', (req, res) => {
+  contractsController.viewHandoutPdf(req, res, Contract);
+});
 router.get('/:id/view/pdf', function(req, res){
   contractsController.viewPdf(req, res, Contract);
 });

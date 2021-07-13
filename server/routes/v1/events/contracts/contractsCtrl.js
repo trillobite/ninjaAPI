@@ -1,6 +1,7 @@
 var Customer = require('mongoose').model('Customer');
 var Contract = require('mongoose').model('Contract');
 var pdfPrinter = require('./pdfTemplateEngine');
+let handoutPdfPrinter = require('./handoutPdfTemplateEngine');
 //var amqp = require('amqplib/callback_api');
 
 
@@ -17,6 +18,18 @@ exports.viewPdf = function (req, res, model) {
     });
 }
 
+exports.viewHandoutPdf = function (req, res, model) {
+  console.log(req.params.id);
+  Contract
+    .findById({ _id: req.params.id })
+    .populate('customer')
+    .exec((err, result) => {
+      handoutPdfPrinter.generate(null, result).then((result) => {
+        res.contentType('application/pdf')
+        res.send(result)
+      });
+    });
+}
 exports.createContract = function (req, res, model) {
   var modelItemData = req.body;
   // set the meta company
