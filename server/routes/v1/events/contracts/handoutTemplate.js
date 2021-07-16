@@ -27,7 +27,7 @@ module.exports = function (data) {
       data.menuItems.map((mi) => {
 
         let title = {
-          text: mi.name,
+          text: mi.name.toUpperCase(),
         };
 
         let subtitle = {
@@ -35,7 +35,7 @@ module.exports = function (data) {
         };
 
         if (mi.itemType == "divider") {
-          title.text.toUpperCase();
+          title.decoration = "underline";
           title.style = ["bold", "alignCenter", "fontSize10", "marginTop5"];
           subtitle.style = ["fontSize6", "alignCenter", "marginBottom5"];
         } else {

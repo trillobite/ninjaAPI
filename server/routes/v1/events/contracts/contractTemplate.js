@@ -24,7 +24,7 @@ module.exports = function (data) {
     // console.log("items:", items);
     let total = 0;
     items.map((obj) => {
-      if(obj.quantity == undefined) {
+      if (obj.quantity == undefined) {
         total += obj.price;
       } else {
         total += (obj.quantity * obj.price);
@@ -46,7 +46,7 @@ module.exports = function (data) {
   const getDepositTotal = (depositItems) => {
     let total = 0;
     depositItems.map((deposit) => {
-      if(deposit.dateComplete) {
+      if (deposit.dateComplete) {
         total += deposit.amount;
       }
     });
@@ -79,7 +79,7 @@ module.exports = function (data) {
     console.log("venues:", arrVenue);
     let str = "";
     arrVenue.map((obj) => {
-      if(str.length > 0) {
+      if (str.length > 0) {
         str += ",";
       }
       str += obj.name;
@@ -97,134 +97,194 @@ module.exports = function (data) {
 
   const sectionEventSteps = (events) => {
     console.log("events:", events);
-    return events && events.length > 0 ?
-      `"Event Steps"`
-      : "{}"
+    if(events && events.length > 0) {
+      return {
+        text: "Event Steps",
+
+      }
+    } else {
+      return {};
+    }
   };
 
   const sectionRentalItems = (rentalItems) => {
 
     let tmp = (arr) => {
       console.log("rental!!!!!!!!!!!!!!!!!", arr);
-      if(arr == []) {
+      if (arr == []) {
         return undefined;
       }
 
       return arr.map((ri) => {
-        return `[
-              { "stack": [ { "text": "${ri.name}", "style": ["bold", "fontSize10"] }] },
-              {"text": "${ri.quantity}", "style": ["fontSize8"]},
-              {"text": "${numUtils.convertToCurrencyString(ri.price)}", "style": ["fontSize8"]},
-              {"text": "${numUtils.convertToCurrencyString(ri.quantity * ri.price)}", "style": ["fontSize8"]}
-            ]`;
-      }).join(",");
+        return [
+          { stack: [{ text: ri.name, style: ["bold", "fontSize10"] }] },
+          { text: ri.quantity, style: ["fontSize8"] },
+          { text: numUtils.convertToCurrencyString(ri.price), style: ["fontSize8"] },
+          { text: numUtils.convertToCurrencyString(ri.quantity * ri.price), style: ["fontSize8"] }
+        ];
+      });
     }
 
-    let rentalTable = `{
-        "style": "tableExample",
-        "table": {
-          "widths": ["*", 72, 72, 72],
-          "body": [
-            ["Rental Item", "Quantity", "Price", "Extended"]${tmp(rentalItems) ? "," + tmp(rentalItems) : ""}
-          ]
-        }
-      }`
+    let rentalTable = {
+      style: "tableExample",
+      table: {
+        widths: ["*", 72, 72, 72],
+        body: [["Rental Item", "Quantity", "Price", "Extended"]]
+      }
+    };
+
+    if (tmp(rentalItems)) {
+      rentalTable.table.body.push(tmp(rentalItems));
+    }
 
     return rentalItems && rentalTable;
   };
 
-  let jsonDef = `
+  let header = (data) => {
+    let headerObj = [];
+
+    let column1 = {
+      stack: [
+        {
+          text: "Customer",
+          style: ["fontSize12", "bold"]
+        },
+        {
+          text: `${data.customer.firstName} ${data.customer.lastName}`,
+          style: ["fontSize10"]
+        }
+      ]
+    };
+
+    let column2 = {
+      stack: [
+        {
+          text: "Event Details",
+          style: ["fontSize12", "bold"],
+        },
+        {
+          text: `Event Name: ${data.eventName}`,
+          style: [],
+        },
+        {
+          text: `Event Date: ${dateUtils.dateFormat1(data.eventDate)}`,
+          style: [],
+        },
+        {
+          text: `Event Time: ${dateUtils.timeFormat1(data.time)} to ${dateUtils.timeFormat1(data.endTime)}`,
+          style: [],
+        },
+        {
+          text: `Location: ${getVenues(data.venues)}`,
+          style: [],
+        },
+        {
+          text: `Nature of Event: ${data.natureOfEvent}`,
+          style: [],
+        }
+      ]
+    }
+
+    if (data.customer.phoneNumbers.length > 0) {
+      data.customer.phoneNumbers.map((pn) => {
+        column1.stack.push({
+          text: `${pn.number} (${pn.contractType})`,
+          style: [],
+        });
+      });
+    }
+
+    headerObj.columns = [column1, column2];
+
+    return headerObj;
+  };
+
+  let foodTable = (data) => {
+    let table = {
+      widths: ["*", 72, 72, 72],
+      body: [["Menu Item", "Quantity", "Price", "Extended"]],
+    };
+
+    if (data.menuItems.length > 0) {
+      data.menuItems.map((mi) => {
+
+        table.body.push([
+          {
+            stack: [
+              { text: mi.name, style: ["bold", "fontSize10"] },
+              { text: strUtils.stripNewLines(mi.description), style: ["fontSize8"] }
+            ],
+          },
+
+          { text: mi.quantity, style: ["fontSize8"] },
+          { text: numUtils.convertToCurrencyString(mi.price), style: ["fontSize8"] },
+          { text: numUtils.convertToCurrencyString(mi.quantity * mi.price), style: ["fontSize8"] }
+        ]);
+
+      });
+
+      return table;
+    }
+  };
+
+  let jsonDef =
   {
 
-  "pageSize": "LETTER",
-  "pageOrientation":  "portrait",
-  "pageMargins": [ 18, 18, 18, 18 ],
-  "content": [
-      {"image": "./bailys_logo.JPG", "alignment": "justify"},
+    "pageSize": "LETTER",
+    "pageOrientation": "portrait",
+    "pageMargins": [18, 18, 18, 18],
+    "content": [
+      { "image": "./bailys_logo.JPG", "alignment": "justify" },
       {
         "alignment": "justify",
-        "columns": [
-          {
-            "stack": [
-              { "text": "Customer", "style": ["fontSize12", "bold"] },
-              { "text": ${`"${data.customer.firstName} ${data.customer.lastName}"`}, "style": ["fontSize10"] }
-              ${(data.customer.phoneNumbers.length > 0) ? `,${data.customer.phoneNumbers.map(pn => `{ "text": "${pn.number} (${pn.contactType})", "style": [] }`).join(",")}` : ""}
-              ${(data.customer.emails.length > 0) ? `,${data.customer.emails.map(em => `{ "text": "${em.email} (${em.emailType})", "style": [] }`).join(",")}` : ""}
-            ]      
-          },
-          {
-            "stack": [
-              { "text": "Event Details", "style": ["fontSize12", "bold"] },
-              { "text": ${`"Event Name: ${data.eventName}"`}, "style": [] },
-              { "text": ${`"Event Date: ${dateUtils.dateFormat1(data.eventDate)}"`}, "style": [] },
-              { "text": ${`"Event Time: ${dateUtils.timeFormat1(data.time)} to ${dateUtils.timeFormat1(data.endTime)}"`}, "style": [] },
-              { "text": ${`"Location: ${getVenues(data.venues)}"`}, "style": []},
-              { "text": ${`"Nature of Event: ${data.natureOfEvent}"`}, "style": [] }
-            ]
-          }
-        ]
+        "columns": header(data),
       },
-      {"text": "${evntFoodTxt}", "style": ["fontSize8", "marginTop20"]},
+      { text: evntFoodTxt, style: ["fontSize8", "marginTop20"] },
       {
-        "style": "tableExample",
-        "table": {
-          "widths": ["*", 72, 72, 72],
-          "body": [
-            ["Menu Item", "Quantity", "Price", "Extended"]
-            ${data.menuItems.length > 0 ? "," + data.menuItems.map(mi => {
-            return `[
-                      { "stack": [ 
-                        { "text": "${mi.name}", "style": ["bold", "fontSize10"]}, 
-                        { "text": "${strUtils.stripNewLines(mi.description)}", "style": ["fontSize8"]} 
-                      ]},
-                      {"text": "${mi.quantity}", "style": ["fontSize8"]},
-                      {"text": "${numUtils.convertToCurrencyString(mi.price)}", "style": ["fontSize8"]},
-                      {"text": "${numUtils.convertToCurrencyString(mi.quantity * mi.price)}", "style": ["fontSize8"]}
-                    ]`
-             }).join(",") : ""}
-          ]
-        }
+        style: "tableExample",
+        "table": foodTable(data),
       },
-      ${sectionEventSteps(data.eventSteps)},
-      ${sectionRentalItems(data.rentalItems)},
+      sectionEventSteps(data.eventSteps),
+      sectionRentalItems(data.rentalItems),
       {
-        "style": "tableExample",
-        "table": {
-          "widths": [140, 75],
-          "body": [
-              ["Type", "Totals"],
-              [{"text": "Food Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getMenuTotal(data.menuItems))}", "style": ["fontSize8"]}],
-              [{"text": "Rental Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getRentTotal(data.rentalItems))}", "style": ["fontSize8"]}],
-              [{"text": "Tax", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcTax(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
-              [{"text": "20% Gratuity", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(calcGratuity(totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
-              [{"text": "Sub Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal))}", "style": ["fontSize8"]}],
-              [{"text": "Total", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getTotal())}", "style": ["fontSize8"]}],
-              [{"text": "Deposit", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getDepositTotal(data.deposits))}", "style": ["fontSize8"]}],
-              [{"text": "Total Due", "style": ["fontSize8", "alignRight"]}, {"text": "${numUtils.convertToCurrencyString(getTotalDue())}", "style": ["fontSize8"]}]
+        style: "tableExample",
+        table: {
+          widths: [140, 75],
+          body: [
+            ["Type", "Totals"],
+            [{ text: "Food Total", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(getMenuTotal(data.menuItems))}`, style: ["fontSize8"] }],
+            [{ text: "Rental Total", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(getRentTotal(data.rentalItems))}`, style: ["fontSize8"] }],
+            [{ text: "Tax", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(calcTax(totals.menuTotal + totals.rentTotal))}`, style: ["fontSize8"] }],
+            [{ text: "20% Gratuity", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(calcGratuity(totals.menuTotal + totals.rentTotal))}`, style: ["fontSize8"] }],
+            [{ text: "Sub Total", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString((totals.menuTotal + totals.rentTotal))}`, style: ["fontSize8"] }],
+            [{ text: "Total", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(getTotal())}`, style: ["fontSize8"] }],
+            [{ text: "Deposit", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(getDepositTotal(data.deposits))}`, style: ["fontSize8"] }],
+            [{ text: "Total Due", style: ["fontSize8", "alignRight"] }, { text: `${numUtils.convertToCurrencyString(getTotalDue())}`, style: ["fontSize8"] }]
           ]
         }
       },
       {
-        "text": "Notes", 
-        "style": ["fontSize12", "marginTopBottom18"],
+        text: "Notes",
+        style: ["fontSize12", "marginTopBottom18"],
         "pageBreak": "before"
       },
-      {"text": "${data.notes.replace(/\n/g, "\\n")}", "style": ["fontSize8"]},
-      {"text": "End Time", "style": ["fontSize10", "marginTopBottom18"]},
-      {"text": "${endTimeTxt}", "style": ["fontSize8"]},
-      {"text": "Payments and Billing", "style": ["fontSize10", "marginTopBottom18"]},
-      {"text": "${paybllingTxt}", "style": ["fontSize8"]},
-      {"text": "Inclement Weather", "style": ["fontSize10", "marginTopBottom18"]},
-      {"text": "${weatherTxt}", "style": ["fontSize8"]},
-      {"text": "Menus and Pricing", "style": ["fontSize10", "marginTopBottom18"]},
-      {"text": "${menPricTxt}", "style": ["fontSize8"]}
+      { text: `${data.notes.replace(/\n/g, "\\n")}`, style: ["fontSize8"] },
+      { text: "End Time", style: ["fontSize10", "marginTopBottom18"] },
+      { text: endTimeTxt, style: ["fontSize8"] },
+      { text: "Payments and Billing", style: ["fontSize10", "marginTopBottom18"] },
+      { text: paybllingTxt, style: ["fontSize8"] },
+      { text: "Inclement Weather", style: ["fontSize10", "marginTopBottom18"] },
+      { text: weatherTxt, style: ["fontSize8"] },
+      { text: "Menus and Pricing", style: ["fontSize10", "marginTopBottom18"] },
+      { text: menPricTxt, style: ["fontSize8"] }
     ]
-  }
-  `
+  };
+
 
   // console.log("docDef:", jsonDef);
 
-  let docDef = JSON.parse(jsonDef);
+  // let docDef = JSON.parse(jsonDef);
+  let docDef = jsonDef;
 
 
   docDef.styles = {
