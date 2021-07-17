@@ -34,7 +34,13 @@ module.exports = function (data) {
   };
 
   const getMenuTotal = (menuItems) => {
-    totals.menuTotal = totalIt(menuItems);
+    let tmp = [];
+    menuItems.map((mi) => {
+      if (mi.itemType != "divider") {
+        tmp.push(mi);
+      }
+    });
+    totals.menuTotal = totalIt(tmp);
     return totals.menuTotal;
   };
 
@@ -97,7 +103,7 @@ module.exports = function (data) {
 
   const sectionEventSteps = (events) => {
     console.log("events:", events);
-    if(events && events.length > 0) {
+    if (events && events.length > 0) {
       return {
         text: "Event Steps",
 
@@ -123,7 +129,7 @@ module.exports = function (data) {
           { text: numUtils.convertToCurrencyString(ri.quantity * ri.price), style: ["fontSize8"] }
         ];
       });
-    }
+    };
 
     let rentalTable = {
       style: "tableExample",
@@ -133,11 +139,15 @@ module.exports = function (data) {
       }
     };
 
-    if (tmp(rentalItems)) {
-      rentalTable.table.body.push(tmp(rentalItems));
+    if (rentalItems) {
+      tmp(rentalItems).map((row) => {
+        rentalTable.table.body.push(row);
+      })
+      // rentalTable.table.body.push(tmp(rentalItems));
     }
 
-    return rentalItems && rentalTable;
+    // return rentalItems && rentalTable;
+    return rentalTable;
   };
 
   let header = (data) => {
@@ -152,6 +162,19 @@ module.exports = function (data) {
         {
           text: `${data.customer.firstName} ${data.customer.lastName}`,
           style: ["fontSize10"]
+        },
+        {
+          text: function() {
+            let str = "";
+            data.customer.emails.map((email, index) => {
+              if(index > 0) {
+                str += ", ";
+              }
+              str += `${email.email} (${email.emailType})`;
+            });
+            return str;
+          }(),
+          style: ["fontSize10"]
         }
       ]
     };
@@ -164,23 +187,23 @@ module.exports = function (data) {
         },
         {
           text: `Event Name: ${data.eventName}`,
-          style: [],
+          style: ["fontSize10"],
         },
         {
           text: `Event Date: ${dateUtils.dateFormat1(data.eventDate)}`,
-          style: [],
+          style: ["fontSize10"],
         },
         {
           text: `Event Time: ${dateUtils.timeFormat1(data.time)} to ${dateUtils.timeFormat1(data.endTime)}`,
-          style: [],
+          style: ["fontSize10"],
         },
         {
           text: `Location: ${getVenues(data.venues)}`,
-          style: [],
+          style: ["fontSize10"],
         },
         {
           text: `Nature of Event: ${data.natureOfEvent}`,
-          style: [],
+          style: ["fontSize10"],
         }
       ]
     }
@@ -194,9 +217,9 @@ module.exports = function (data) {
       });
     }
 
-    headerObj.columns = [column1, column2];
+    // headerObj.columns = [column1, column2];
 
-    return headerObj;
+    return [column1, column2];
   };
 
   let foodTable = (data) => {
@@ -208,18 +231,20 @@ module.exports = function (data) {
     if (data.menuItems.length > 0) {
       data.menuItems.map((mi) => {
 
-        table.body.push([
-          {
-            stack: [
-              { text: mi.name, style: ["bold", "fontSize10"] },
-              { text: strUtils.stripNewLines(mi.description), style: ["fontSize8"] }
-            ],
-          },
+        if (mi.itemType != "divider") {
+          table.body.push([
+            {
+              stack: [
+                { text: mi.name, style: ["bold", "fontSize10"] },
+                { text: strUtils.stripNewLines(mi.description), style: ["fontSize8"] }
+              ],
+            },
 
-          { text: mi.quantity, style: ["fontSize8"] },
-          { text: numUtils.convertToCurrencyString(mi.price), style: ["fontSize8"] },
-          { text: numUtils.convertToCurrencyString(mi.quantity * mi.price), style: ["fontSize8"] }
-        ]);
+            { text: mi.quantity, style: ["fontSize8"] },
+            { text: numUtils.convertToCurrencyString(mi.price), style: ["fontSize8"] },
+            { text: numUtils.convertToCurrencyString(mi.quantity * mi.price), style: ["fontSize8"] }
+          ]);
+        }
 
       });
 
@@ -268,7 +293,13 @@ module.exports = function (data) {
         style: ["fontSize12", "marginTopBottom18"],
         "pageBreak": "before"
       },
-      { text: `${data.notes.replace(/\n/g, "\\n")}`, style: ["fontSize8"] },
+      {
+        text: data.notes,
+        style: ["fontSize8"],
+        // text: function () {
+        //   return data.notes.replace(/\n/g, "\\n");
+        // }(), style: ["fontSize8"]
+      },
       { text: "End Time", style: ["fontSize10", "marginTopBottom18"] },
       { text: endTimeTxt, style: ["fontSize8"] },
       { text: "Payments and Billing", style: ["fontSize10", "marginTopBottom18"] },
